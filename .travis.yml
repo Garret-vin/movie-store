@@ -13,12 +13,16 @@ addons:
       - mysql-server
 
 before_install:
-  - sudo mysql -u root --password='rootroot'
+  - mysql -u root --password="rootroot" < test/travis.sql
 
 
 cache:
   directories:
     - $HOME/.m2
+
+sudo: false
+
+script: mvn clean verify
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
