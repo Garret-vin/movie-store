@@ -13,7 +13,7 @@ addons:
       - mysql-server
 
 before_install:
-  - mysql -u root --password="rootroot" < test/travis.sql
+  - mysql -u root --password="rootroot" < /home/garret/snap/ideaprojects/movie-store/src/main/resources/test/travis.sql
 
 
 cache:
