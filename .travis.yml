@@ -23,7 +23,5 @@ cache:
 
 sudo: false
 
-script: mvn clean verify
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
