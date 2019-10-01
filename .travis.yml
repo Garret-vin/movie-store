@@ -4,15 +4,15 @@ jdk:
 
 sudo: false
 
-services:
-  - mysql
-
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
+#services:
+#  - mysql
+#
+#addons:
+#  apt:
+#    sources:
+#      - mysql-5.7-trusty
+#    packages:
+#      - mysql-server
 
 #before_install:
 #  - mysql -e 'CREATE DATABASE myapp_test;'
