@@ -1,7 +1,11 @@
 language: java
 jdk:
   - oraclejdk11
+
 sudo: false
+
+services:
+  - mysql
 
 cache:
   directories:
