@@ -6,7 +6,8 @@ services:
   - mysql
 
 before_install:
-  - mysql -u root --password='rootroot'
+  - sudo mysql -e "use mysql; update user set password=PASSWORD('rootroot') where User='root';FLUSH PRIVILEGES;"
+  - sudo service mysql restart
 
 cache:
   directories:
