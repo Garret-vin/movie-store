@@ -2,13 +2,11 @@ language: java
 jdk:
   - oraclejdk11
 
-sudo: false
-
 services:
   - mysql
 
 before_install:
-  - mysql -u root --password="rootroot"
+  - mysql -u root -p rootroot
 
 cache:
   directories:
