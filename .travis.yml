@@ -13,7 +13,8 @@ addons:
       - mysql-server
 
 before_install:
-  - mysql -u root --password="rootroot" < /home/garret/snap/ideaprojects/movie-store/src/main/resources/test/travis.sql
+  - mysql -e 'CREATE DATABASE myapp_test;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 
 
 cache:
