@@ -13,7 +13,7 @@ addons:
       - mysql-server
 
 before_install:
-  - sudo mysql_upgrade -u root -prootroot
+  - sudo mysql -u root -prootroot
 
 
 cache:
