@@ -6,7 +6,7 @@ services:
   - mysql
 
 before_install:
-  - mysql -u root -p rootroot
+  - mysql -u root --password='rootroot'
 
 cache:
   directories:
