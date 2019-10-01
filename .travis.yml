@@ -2,6 +2,8 @@ language: java
 jdk:
   - oraclejdk11
 
+sudo: false
+
 services:
   - mysql
 
@@ -12,15 +14,15 @@ addons:
     packages:
       - mysql-server
 
-before_install:
-  - mysql -e 'CREATE DATABASE myapp_test;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+#before_install:
+#  - mysql -e 'CREATE DATABASE myapp_test;'
+#  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 
 cache:
   directories:
     - $HOME/.m2
 
-sudo: false
+
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
