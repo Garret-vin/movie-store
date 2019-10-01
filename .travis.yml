@@ -12,6 +12,10 @@ addons:
     packages:
       - mysql-server
 
+before_install:
+  - sudo mysql_upgrade -u root -prootroot
+
+
 cache:
   directories:
     - $HOME/.m2
