@@ -1,4 +1,5 @@
 language: java
+
 jdk:
   - oraclejdk11
 
@@ -6,23 +7,31 @@ sudo: false
 
 services:
   - mysql
-#
-#addons:
-#  apt:
-#    sources:
-#      - mysql-5.7-trusty
-#    packages:
-#      - mysql-server
 
-#before_install:
-#  - mysql -e 'CREATE DATABASE myapp_test;'
-#  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+
+before_install:
+  - mysql -u root
 
 cache:
   directories:
     - $HOME/.m2
 
-
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email:
+    recipients:
+      - pavlenko.av92@gmail.com
+    on_success: never
+    on_failure: never
+
+env:
+  global:
+    - CODECOV_TOKEN="d583518b-95d1-415e-a777-ec6a4ecab96b"
