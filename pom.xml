@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <dockerfile.version>1.4.1</dockerfile.version>
+        <docker.image.prefix>garret</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -32,11 +34,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--MySql-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!--Lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -52,19 +57,31 @@
             <artifactId>spring-batch-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--Jacoco-->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.3</version>
         </dependency>
+
+        <!--Swagger-->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-jaxrs</artifactId>
+            <version>1.5.22</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
+            <!--Spring boot plugin-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
             <!-- JaCoCo plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
