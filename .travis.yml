@@ -8,12 +8,8 @@ sudo: false
 services:
   - mysql
 
-addons:
-  apt:
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
+before_install:
+  - mysql -u root -e 'CREATE DATABASE movieStore;'
 
 cache:
   directories:
