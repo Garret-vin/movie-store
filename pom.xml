@@ -29,6 +29,24 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--Collections util-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.0</version>
+            </dependency>
+
+            <!--OMDB api-->
+            <dependency>
+                <groupId>com.omertron</groupId>
+                <artifactId>API-OMDB</artifactId>
+                <version>1.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!--<dependency>
             <groupId>org.springframework.boot</groupId>
