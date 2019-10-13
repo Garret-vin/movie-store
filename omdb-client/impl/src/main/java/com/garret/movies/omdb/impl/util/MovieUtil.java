@@ -1,4 +1,4 @@
-package com.garret.movies.omdb.util;
+package com.garret.movies.omdb.impl.util;
 
 
 import com.garret.movies.dao.entity.Actor;

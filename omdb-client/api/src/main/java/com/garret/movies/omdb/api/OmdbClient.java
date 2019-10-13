@@ -1,4 +1,4 @@
-package com.garret.movies.omdb.client;
+package com.garret.movies.omdb.api;
 
 import com.garret.movies.dao.entity.Movie;
 

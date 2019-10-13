@@ -1,8 +1,8 @@
-package com.garret.movies.omdb.client.impl;
+package com.garret.movies.omdb.impl.client;
 
 import com.garret.movies.dao.entity.Movie;
-import com.garret.movies.omdb.client.OmdbClient;
-import com.garret.movies.omdb.util.MovieUtil;
+import com.garret.movies.omdb.api.OmdbClient;
+import com.garret.movies.omdb.impl.util.MovieUtil;
 import com.omertron.omdbapi.OMDBException;
 import com.omertron.omdbapi.OmdbApi;
 import com.omertron.omdbapi.model.OmdbVideoBasic;
@@ -49,7 +49,7 @@ public class OmdbClientImpl implements OmdbClient {
     @Transactional
     public List<Movie> searchMovies(@NonNull String title) {
         try {
-            List<OmdbVideoBasic> videoList = omdbApi.search(title).getResults();
+            List<OmdbVideoBasic> videoList = ListUtils.emptyIfNull(omdbApi.search(title).getResults());
             return ListUtils.emptyIfNull(videoList.stream()
                     .map(OmdbVideoBasic::getImdbID)
                     .map(this::getFromApiByImdbId)

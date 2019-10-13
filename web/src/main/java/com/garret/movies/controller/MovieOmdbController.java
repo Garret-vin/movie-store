@@ -1,8 +1,8 @@
 package com.garret.movies.controller;
 
 import com.garret.movies.dao.entity.Movie;
-import com.garret.movies.omdb.client.OmdbClient;
-import com.garret.movies.service.MovieService;
+import com.garret.movies.omdb.api.OmdbClient;
+import com.garret.movies.service.api.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

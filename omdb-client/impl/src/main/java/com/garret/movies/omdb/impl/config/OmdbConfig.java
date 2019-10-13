@@ -1,4 +1,4 @@
-package com.garret.movies.omdb.config;
+package com.garret.movies.omdb.impl.config;
 
 import com.omertron.omdbapi.OmdbApi;
 import org.springframework.beans.factory.annotation.Value;

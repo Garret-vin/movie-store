@@ -1,4 +1,4 @@
-package com.garret.movies.service;
+package com.garret.movies.service.api;
 
 import com.garret.movies.dao.entity.Movie;
 
