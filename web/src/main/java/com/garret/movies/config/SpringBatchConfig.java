@@ -53,7 +53,7 @@ public class SpringBatchConfig {
     public ItemReader<Movie> itemReader(@Value("#{jobParameters[title]}") String title) {
         final List<Movie> newMovies = omdbClient.searchMovies(title)
                 .stream()
-                .filter(movieService::isNotPresent)
+                .filter(movie -> !movieService.existsInDb(movie))
                 .collect(Collectors.toList());
         return new ListItemReader<>(newMovies);
     }

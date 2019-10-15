@@ -83,8 +83,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public boolean isNotPresent(Movie movie) {
+    public boolean existsInDb(Movie movie) {
         Optional<Movie> opt = getByImdbId(movie.getImdbId());
-        return !opt.isPresent();
+        return opt.isPresent();
     }
 }

@@ -26,5 +26,5 @@ public interface MovieService {
 
     void deleteById(Long id);
 
-    boolean isNotPresent(Movie movie);
+    boolean existsInDb(Movie movie);
 }
