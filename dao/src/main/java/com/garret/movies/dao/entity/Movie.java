@@ -36,6 +36,7 @@ public class Movie {
     private String imdbId;
     private Double imdbRating;
     private Integer imdbVotes;
-    private String language;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Language> languages;
     private String country;
 }

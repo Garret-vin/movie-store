@@ -77,6 +77,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public List<Movie> getAllByLanguage(String language) {
+        return movieRepository.findAllByLanguagesValue(language);
+    }
+
+    @Override
     public void deleteById(Long id) {
         movieRepository.deleteById(id);
         log.info("Deleted movie with id = " + id);

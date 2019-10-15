@@ -18,4 +18,6 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
     List<Movie> findAllByActorsLastName(String lastName);
 
     List<Movie> findAllByReleasedBetween(Date start, Date end);
+
+    List<Movie> findAllByLanguagesValue(String language);
 }

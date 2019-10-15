@@ -96,7 +96,7 @@ public class OmdbClientImpl implements OmdbClient {
                 .imdbId(omdbVideo.getImdbID())
                 .imdbRating(Double.valueOf(omdbVideo.getImdbRating()))
                 .imdbVotes(MovieUtil.convertVotesToInt(omdbVideo.getImdbVotes()))
-                .language(omdbVideo.getLanguages().get(0))
+                .languages(MovieUtil.languagesToList(omdbVideo.getLanguages()))
                 .plot(omdbVideo.getPlot())
                 .released(MovieUtil.parseDate(omdbVideo.getReleased()))
                 .runtime(omdbVideo.getRuntime())

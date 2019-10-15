@@ -24,6 +24,8 @@ public interface MovieService {
 
     List<Movie> getAllByYear(Date start, Date end);
 
+    List<Movie> getAllByLanguage(String language);
+
     void deleteById(Long id);
 
     boolean existsInDb(Movie movie);

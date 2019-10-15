@@ -22,6 +22,11 @@ public class MovieDatabaseController {
         return movieService.getAllByGenre(genre);
     }
 
+    @GetMapping("/lang/{language}")
+    public List<Movie> getByLanguage(@PathVariable("language") String language) {
+        return movieService.getAllByLanguage(language);
+    }
+
     @GetMapping("/actor/{lastName}")
     public List<Movie> getByActorLastName(@PathVariable("lastName") String lastName) {
         return movieService.getAllByActorsLastName(lastName);
