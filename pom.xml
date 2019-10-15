@@ -4,6 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>dao</module>
+        <module>movie-service</module>
+        <module>omdb-client</module>
+        <module>web</module>
+    </modules>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -23,6 +30,24 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--Collections util-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>4.0</version>
+            </dependency>
+
+            <!--OMDB api-->
+            <dependency>
+                <groupId>com.omertron</groupId>
+                <artifactId>API-OMDB</artifactId>
+                <version>1.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
