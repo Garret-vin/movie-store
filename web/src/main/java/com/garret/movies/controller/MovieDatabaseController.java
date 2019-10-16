@@ -28,7 +28,7 @@ public class MovieDatabaseController {
     }
 
     @GetMapping("/actor/{actor}")
-    public List<Movie> getByActorLastName(@PathVariable("actor") String actor) {
+    public List<Movie> getByActor(@PathVariable("actor") String actor) {
         return movieService.getAllByActor(actor);
     }
 

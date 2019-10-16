@@ -32,7 +32,7 @@ public class Movie {
     @Column(length = 1024)
     private String plot;
     private String type;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String imdbId;
     private Double imdbRating;
     private Integer imdbVotes;
