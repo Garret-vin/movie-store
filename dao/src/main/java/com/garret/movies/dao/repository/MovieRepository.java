@@ -15,9 +15,13 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
 
     List<Movie> findAllByGenresValue(String genre);
 
-    List<Movie> findAllByActorsLastName(String lastName);
+    List<Movie> findAllByActorsFullNameContains(String actor);
 
     List<Movie> findAllByReleasedBetween(Date start, Date end);
 
     List<Movie> findAllByLanguagesValue(String language);
+
+    List<Movie> findAllByOrderByImdbVotesDesc();
+
+    List<Movie> findAllByOrderByImdbRatingDesc();
 }

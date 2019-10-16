@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -19,14 +18,10 @@ import java.util.stream.Collectors;
 public class MovieUtil {
 
     public static List<Actor> actorsToList(String actors) {
-        String[] splitArray = actors.split(",");
-        List<Actor> actorList = new ArrayList<>();
-        for (String actorString : splitArray) {
-            String[] fullName = actorString.trim().split(" ");
-            Actor actor = new Actor(fullName[0], fullName[1]);
-            actorList.add(actor);
-        }
-        return actorList;
+        return Arrays.stream(actors.split(","))
+                .map(String::trim)
+                .map(Actor::new)
+                .collect(Collectors.toList());
     }
 
     public static List<Genre> genresToList(String genres) {

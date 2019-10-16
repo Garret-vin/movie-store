@@ -20,11 +20,15 @@ public interface MovieService {
 
     List<Movie> getAllByGenre(String genre);
 
-    List<Movie> getAllByActorsLastName(String lastName);
+    List<Movie> getAllByActor(String actor);
 
     List<Movie> getAllByYear(Date start, Date end);
 
     List<Movie> getAllByLanguage(String language);
+
+    List<Movie> getTopByVotes();
+
+    List<Movie> getTopByRating();
 
     void deleteById(Long id);
 

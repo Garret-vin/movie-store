@@ -67,8 +67,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getAllByActorsLastName(@NonNull String lastName) {
-        return movieRepository.findAllByActorsLastName(lastName);
+    public List<Movie> getAllByActor(@NonNull String actor) {
+        return movieRepository.findAllByActorsFullNameContains(actor);
     }
 
     @Override
@@ -79,6 +79,16 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> getAllByLanguage(String language) {
         return movieRepository.findAllByLanguagesValue(language);
+    }
+
+    @Override
+    public List<Movie> getTopByVotes() {
+        return movieRepository.findAllByOrderByImdbVotesDesc();
+    }
+
+    @Override
+    public List<Movie> getTopByRating() {
+        return movieRepository.findAllByOrderByImdbRatingDesc();
     }
 
     @Override

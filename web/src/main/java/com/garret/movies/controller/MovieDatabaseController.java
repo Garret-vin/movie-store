@@ -27,9 +27,9 @@ public class MovieDatabaseController {
         return movieService.getAllByLanguage(language);
     }
 
-    @GetMapping("/actor/{lastName}")
-    public List<Movie> getByActorLastName(@PathVariable("lastName") String lastName) {
-        return movieService.getAllByActorsLastName(lastName);
+    @GetMapping("/actor/{actor}")
+    public List<Movie> getByActorLastName(@PathVariable("actor") String actor) {
+        return movieService.getAllByActor(actor);
     }
 
     @GetMapping("/year/{year}")
@@ -44,6 +44,16 @@ public class MovieDatabaseController {
         } catch (ParseException e) {
             throw new RuntimeException("Can't parse date from DB");
         }
+    }
+
+    @GetMapping("/top/votes")
+    public List<Movie> getTopByVotes() {
+        return movieService.getTopByVotes();
+    }
+
+    @GetMapping("/top/rating")
+    public List<Movie> getTopByRating() {
+        return movieService.getTopByRating();
     }
 
     @GetMapping("/all")
