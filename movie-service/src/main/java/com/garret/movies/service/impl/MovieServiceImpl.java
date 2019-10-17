@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +58,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Optional<Movie> getByImdbId(String imdbId) {
+    public Optional<Movie> getByImdbId(@NonNull String imdbId) {
         return movieRepository.findByImdbId(imdbId);
     }
 
@@ -72,12 +74,21 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getAllByYear(Date start, Date end) {
-        return movieRepository.findAllByReleasedBetween(start, end);
+    public List<Movie> getAllByYear(@NonNull Integer year) {
+        String start = year + "-01-01";
+        String end = year + "-12-31";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date startDate = formatter.parse(start);
+            Date endDate = formatter.parse(end);
+            return movieRepository.findAllByReleasedBetween(startDate, endDate);
+        } catch (ParseException e) {
+            throw new RuntimeException("Can't parse date from DB");
+        }
     }
 
     @Override
-    public List<Movie> getAllByLanguage(String language) {
+    public List<Movie> getAllByLanguage(@NonNull String language) {
         return movieRepository.findAllByLanguagesValue(language);
     }
 
@@ -92,14 +103,19 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(@NonNull Long id) {
         movieRepository.deleteById(id);
         log.info("Deleted movie with id = " + id);
     }
 
     @Override
-    public boolean existsInDb(Movie movie) {
+    public boolean existsInDb(@NonNull Movie movie) {
         Optional<Movie> opt = getByImdbId(movie.getImdbId());
         return opt.isPresent();
+    }
+
+    @Override
+    public List<Movie> getAllByCountry(@NonNull String country) {
+        return movieRepository.findAllByCountry(country);
     }
 }

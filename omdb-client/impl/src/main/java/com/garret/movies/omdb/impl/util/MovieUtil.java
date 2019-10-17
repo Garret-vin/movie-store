@@ -14,12 +14,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class MovieUtil {
 
-    public static List<Actor> actorsToList(@NonNull String actors) {
+    private static final Pattern DATE_PATTERN =
+            Pattern.compile("^(([0-9])|([0-2][0-9])|([3][0-1])) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4}$");
+
+    public static List<Actor> actorsToList(String actors) {
         if (actors.isEmpty()) {
             return Collections.emptyList();
         }
@@ -29,7 +33,7 @@ public class MovieUtil {
                 .collect(Collectors.toList());
     }
 
-    public static List<Genre> genresToList(@NonNull String genres) {
+    public static List<Genre> genresToList(String genres) {
         if (genres.isEmpty()) {
             return Collections.emptyList();
         }
@@ -39,14 +43,14 @@ public class MovieUtil {
                 .collect(Collectors.toList());
     }
 
-    public static List<Language> languagesToList(@NonNull List<String> languages) {
+    public static List<Language> languagesToList(List<String> languages) {
         return languages.stream()
                 .map(String::trim)
                 .map(Language::new)
                 .collect(Collectors.toList());
     }
 
-    public static Integer convertVotesToInt(@NonNull String votes) {
+    public static Integer convertVotesToInt(String votes) {
         if (votes.isEmpty()) {
             return 0;
         }
@@ -58,13 +62,13 @@ public class MovieUtil {
         return Integer.parseInt(builder.toString());
     }
 
-    public static Date parseDate(@NonNull String released) {
-        String pattern = "dd MMM yyyy";
-        if (released.length() != pattern.length()) {
+    public static Date parseDate(String released) {
+        if (!DATE_PATTERN.matcher(released).matches()) {
             log.info("Release date not found, default value was set");
             return Date.valueOf("1111-11-11");
         }
         try {
+            String pattern = "dd MMM yyyy";
             SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.ENGLISH);
             java.util.Date javaDate = formatter.parse(released);
             return new Date(javaDate.getTime());

@@ -139,10 +139,4 @@ public class MovieUtilTest {
 
         assertThat(result).isInSameDayAs(expected);
     }
-
-    @Test(expected = RuntimeException.class)
-    public void testParseDate_whenInvalidInputParameters_butLengthIsSame() {
-        String params = "asdfasdsdfd";
-        MovieUtil.parseDate(params);
-    }
 }

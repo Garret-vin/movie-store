@@ -1,6 +1,7 @@
 package com.garret.movies.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 @RequestMapping("/api")
 public class MovieOmdbController {
 
@@ -29,7 +31,7 @@ public class MovieOmdbController {
         parametersBuilder.addLong("time", System.currentTimeMillis());
         JobParameters jobParameters = parametersBuilder.toJobParameters();
         JobExecution jobExecution = jobLauncher.run(job, jobParameters);
-        System.out.println("Job execution status: " + jobExecution.getStatus());
+        log.info("Job execution status: " + jobExecution.getStatus());
 
         return jobExecution.getStatus();
     }

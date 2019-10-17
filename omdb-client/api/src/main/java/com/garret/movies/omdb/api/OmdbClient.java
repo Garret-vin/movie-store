@@ -8,5 +8,5 @@ public interface OmdbClient {
 
     List<Movie> searchMovies(String title);
 
-    Movie searchMovieByTitle(String title);
+//    Movie searchMovieByTitle(String title);
 }

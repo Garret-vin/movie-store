@@ -22,7 +22,7 @@ public interface MovieService {
 
     List<Movie> getAllByActor(String actor);
 
-    List<Movie> getAllByYear(Date start, Date end);
+    List<Movie> getAllByYear(Integer year);
 
     List<Movie> getAllByLanguage(String language);
 
@@ -33,4 +33,6 @@ public interface MovieService {
     void deleteById(Long id);
 
     boolean existsInDb(Movie movie);
+
+    List<Movie> getAllByCountry(String country);
 }

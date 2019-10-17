@@ -38,5 +38,8 @@ public class Movie {
     private Integer imdbVotes;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Language> languages;
-    private String country;
+    @ElementCollection
+    @CollectionTable(name = "country", joinColumns = @JoinColumn(name = "movie_id"))
+    @Column(name = "country")
+    private List<String> country;
 }

@@ -27,6 +27,11 @@ public class MovieDatabaseController {
         return movieService.getAllByLanguage(language);
     }
 
+    @GetMapping("/country/{country}")
+    public List<Movie> getByCountry(@PathVariable("country") String country) {
+        return movieService.getAllByCountry(country);
+    }
+
     @GetMapping("/actor/{actor}")
     public List<Movie> getByActor(@PathVariable("actor") String actor) {
         return movieService.getAllByActor(actor);
@@ -34,16 +39,7 @@ public class MovieDatabaseController {
 
     @GetMapping("/year/{year}")
     public List<Movie> getByYear(@PathVariable("year") Integer year) {
-        String start = year + "-01-01";
-        String end = year + "-12-31";
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date startDate = formatter.parse(start);
-            Date endDate = formatter.parse(end);
-            return movieService.getAllByYear(startDate, endDate);
-        } catch (ParseException e) {
-            throw new RuntimeException("Can't parse date from DB");
-        }
+        return movieService.getAllByYear(year);
     }
 
     @GetMapping("/top/votes")

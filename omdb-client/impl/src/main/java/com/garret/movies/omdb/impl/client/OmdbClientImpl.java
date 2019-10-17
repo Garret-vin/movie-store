@@ -33,20 +33,6 @@ public class OmdbClientImpl implements OmdbClient {
 
     @Override
     @Transactional
-    public Movie searchMovieByTitle(@NonNull String title) {
-        OmdbParameters params = new OmdbParameters();
-        params.add(Param.TITLE, title);
-        try {
-            OmdbVideoFull omdbVideo = omdbApi.getInfo(params);
-            return buildMovie(omdbVideo);
-        } catch (OMDBException e) {
-            log.error("Invalid parameters", e);
-            throw new RuntimeException("Movie not found, please input valid parameters");
-        }
-    }
-
-    @Override
-    @Transactional
     public List<Movie> searchMovies(@NonNull String title) {
         try {
             List<OmdbVideoBasic> videoList = ListUtils.emptyIfNull(omdbApi.search(title).getResults());
@@ -59,21 +45,6 @@ public class OmdbClientImpl implements OmdbClient {
         }
         return Collections.emptyList();
     }
-
-    /*private List<OmdbVideoBasic> getFullResponse(String title) throws OMDBException {
-        List<OmdbVideoBasic> result = new ArrayList<>();
-        SearchResults response = omdbApi.search(title);
-        double totalPages = (double) response.getTotalResults() / 10;
-        int page = 0;
-        do {
-            page++;
-            OmdbParameters params = new OmdbParameters();
-            params.add(Param.SEARCH, title);
-            params.add(Param.fromString("page"), page);
-            result.addAll(omdbApi.search(params).getResults());
-        } while (totalPages >= page);
-        return result;
-    }*/
 
     private Movie getFromApiByImdbId(@NonNull String imdbId) {
         try {
@@ -90,7 +61,7 @@ public class OmdbClientImpl implements OmdbClient {
     private Movie buildMovie(OmdbVideoFull omdbVideo) {
         return Movie.builder()
                 .actors(MovieUtil.actorsToList(omdbVideo.getActors()))
-                .country(omdbVideo.getCountries().get(0))
+                .country(omdbVideo.getCountries().stream().map(String::trim).collect(Collectors.toList()))
                 .director(omdbVideo.getDirector())
                 .genres(MovieUtil.genresToList(omdbVideo.getGenre()))
                 .imdbId(omdbVideo.getImdbID())
