@@ -4,7 +4,7 @@ package com.garret.movies.omdb.impl.util;
 import com.garret.movies.dao.entity.Actor;
 import com.garret.movies.dao.entity.Genre;
 import com.garret.movies.dao.entity.Language;
-import lombok.NonNull;
+import com.garret.movies.omdb.impl.exception.IncorrectDateException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Date;
@@ -29,8 +29,11 @@ public class MovieUtil {
         }
         return Arrays.stream(actors.split(","))
                 .map(String::trim)
-                .map(Actor::new)
-                .collect(Collectors.toList());
+                .map(name -> {
+                    Actor actor = new Actor();
+                    actor.setFullName(name);
+                    return actor;
+                }).collect(Collectors.toList());
     }
 
     public static List<Genre> genresToList(String genres) {
@@ -39,15 +42,21 @@ public class MovieUtil {
         }
         return Arrays.stream(genres.split(","))
                 .map(String::trim)
-                .map(Genre::new)
-                .collect(Collectors.toList());
+                .map(genreTitle -> {
+                    Genre genre = new Genre();
+                    genre.setValue(genreTitle);
+                    return genre;
+                }).collect(Collectors.toList());
     }
 
-    public static List<Language> languagesToList(List<String> languages) {
-        return languages.stream()
+    public static List<Language> languagesToList(List<String> languageList) {
+        return languageList.stream()
                 .map(String::trim)
-                .map(Language::new)
-                .collect(Collectors.toList());
+                .map(lang -> {
+                    Language language = new Language();
+                    language.setValue(lang);
+                    return language;
+                }).collect(Collectors.toList());
     }
 
     public static Integer convertVotesToInt(String votes) {
@@ -74,7 +83,7 @@ public class MovieUtil {
             return new Date(javaDate.getTime());
         } catch (ParseException e) {
             log.warn("Can't parse date", e);
-            throw new RuntimeException("Date parsing was failed");
+            throw new IncorrectDateException("Date parsing was failed");
         }
     }
 }

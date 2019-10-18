@@ -12,8 +12,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "movie")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Movie {
 

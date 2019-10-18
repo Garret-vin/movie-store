@@ -2,7 +2,6 @@ package com.garret.movies.service.api;
 
 import com.garret.movies.dao.entity.Movie;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +29,7 @@ public interface MovieService {
 
     List<Movie> getTopByRating();
 
-    void deleteById(Long id);
+    boolean deleteById(Long id);
 
     boolean existsInDb(Movie movie);
 

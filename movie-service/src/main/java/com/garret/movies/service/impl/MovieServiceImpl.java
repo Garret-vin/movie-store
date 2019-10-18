@@ -3,6 +3,8 @@ package com.garret.movies.service.impl;
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
+import com.garret.movies.service.exception.IncorrectDateException;
+import com.google.inject.internal.util.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public List<Movie> saveAll(@NonNull List<Movie> movies) {
         movieRepository.saveAll(movies);
         log.info(movies.size() + " movies saved to database");
@@ -46,18 +49,17 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Movie> getById(@NonNull Long id) {
-        log.info("Getting movie from database by id = " + id);
         return movieRepository.findById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Movie> getAll() {
-        log.info("Getting all movies from database");
-        return (List<Movie>) movieRepository.findAll();
+        return ImmutableList.copyOf(movieRepository.findAll());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Movie> getByImdbId(@NonNull String imdbId) {
         return movieRepository.findByImdbId(imdbId);
     }
@@ -74,6 +76,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Movie> getAllByYear(@NonNull Integer year) {
         String start = year + "-01-01";
         String end = year + "-12-31";
@@ -83,39 +86,50 @@ public class MovieServiceImpl implements MovieService {
             Date endDate = formatter.parse(end);
             return movieRepository.findAllByReleasedBetween(startDate, endDate);
         } catch (ParseException e) {
-            throw new RuntimeException("Can't parse date from DB");
+            log.error("Incorrect date in MovieServiceImpl.class throws from method: getAllByYear()", e);
+            throw new IncorrectDateException("Can't parse date from DB");
         }
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Movie> getAllByLanguage(@NonNull String language) {
         return movieRepository.findAllByLanguagesValue(language);
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Movie> getAllByCountry(@NonNull String country) {
+        return movieRepository.findAllByCountry(country);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Movie> getTopByVotes() {
         return movieRepository.findAllByOrderByImdbVotesDesc();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Movie> getTopByRating() {
         return movieRepository.findAllByOrderByImdbRatingDesc();
     }
 
     @Override
-    public void deleteById(@NonNull Long id) {
-        movieRepository.deleteById(id);
-        log.info("Deleted movie with id = " + id);
+    @Transactional
+    public boolean deleteById(@NonNull Long id) {
+        boolean isDeleted = false;
+        if (movieRepository.existsById(id)) {
+            movieRepository.deleteById(id);
+            isDeleted = true;
+        }
+        log.info("Deleted movie with id = " + id + " is " + isDeleted);
+        return isDeleted;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean existsInDb(@NonNull Movie movie) {
-        Optional<Movie> opt = getByImdbId(movie.getImdbId());
-        return opt.isPresent();
-    }
-
-    @Override
-    public List<Movie> getAllByCountry(@NonNull String country) {
-        return movieRepository.findAllByCountry(country);
+        return movieRepository.existsByImdbId(movie.getImdbId());
     }
 }

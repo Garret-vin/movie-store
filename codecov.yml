@@ -6,9 +6,5 @@ coverage:
   round: down
   range: "70...100"
   ignore:
-    - "/home/garret/snap/ideaprojects/movie-store/dao/src/main/java/com/garret/movies/dao/.*"
-    - "/home/garret/snap/ideaprojects/movie-store/movie-service/src/main/java/com/garret/movies/service/api/.*"
-    - "/home/garret/snap/ideaprojects/movie-store/omdb-client/api/src/main/java/com/garret/movies/omdb/api/.*"
-    - "/home/garret/snap/ideaprojects/movie-store/omdb-client/impl/src/main/java/com/garret/movies/omdb/impl/config/.*"
-    - "/home/garret/snap/ideaprojects/movie-store/web/src/main/java/com/garret/movies/MovieApplication.java"
-    - "/home/garret/snap/ideaprojects/movie-store/web/src/main/java/com/garret/movies/config/SwaggerConfig.java"
+    - "dao/.*"
+    - "omdb-client/api/.*"

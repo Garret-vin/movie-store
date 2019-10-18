@@ -6,14 +6,11 @@ import com.garret.movies.dao.entity.Language;
 import org.junit.Test;
 
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
-
 
 public class MovieUtilTest {
 
@@ -21,9 +18,11 @@ public class MovieUtilTest {
     public void testActorsToList() {
         String actors = "Nikole Kidman, Arnold Schwarzenegger";
 
-        List<Actor> expected = Arrays.asList(
-                new Actor("Arnold Schwarzenegger"),
-                new Actor("Nikole Kidman"));
+        Actor arni = new Actor();
+        arni.setFullName("Arnold Schwarzenegger");
+        Actor niki = new Actor();
+        niki.setFullName("Nikole Kidman");
+        List<Actor> expected = Arrays.asList(arni, niki);
         List<Actor> result = MovieUtil.actorsToList(actors);
 
         assertThat(result)
@@ -32,13 +31,8 @@ public class MovieUtilTest {
                 .hasSameSizeAs(expected);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testActorsToList_Null_Param() {
-        MovieUtil.actorsToList(null);
-    }
-
     @Test
-    public void testActorsToList_EmptyStringInput() {
+    public void testActorsToListWhenEmptyStringInput() {
         List<Actor> result = MovieUtil.actorsToList("");
         assertThat(result).isEmpty();
     }
@@ -46,8 +40,11 @@ public class MovieUtilTest {
     @Test
     public void testGenresToList() {
         String genres = "Comedy, Action";
-
-        List<Genre> expected = Arrays.asList(new Genre("Comedy"), new Genre("Action"));
+        Genre comedy = new Genre();
+        comedy.setValue("Comedy");
+        Genre action = new Genre();
+        action.setValue("Action");
+        List<Genre> expected = Arrays.asList(comedy, action);
         List<Genre> result = MovieUtil.genresToList(genres);
 
         assertThat(result)
@@ -56,13 +53,8 @@ public class MovieUtilTest {
                 .hasSameSizeAs(expected);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testGenresToList_Null_Param() {
-        MovieUtil.genresToList(null);
-    }
-
     @Test
-    public void testGenresToList_EmptyStringInput() {
+    public void testGenresToListWhenEmptyStringInput() {
         List<Genre> result = MovieUtil.genresToList("");
         assertThat(result).isEmpty();
     }
@@ -70,11 +62,13 @@ public class MovieUtilTest {
     @Test
     public void testLanguagesToList() {
         List<String> input = Arrays.asList("English", "Urdu", "Spanish");
-
-        List<Language> expected = Arrays.asList(
-                new Language("English"),
-                new Language("Urdu"),
-                new Language("Spanish"));
+        Language english = new Language();
+        english.setValue("English");
+        Language urdu = new Language();
+        urdu.setValue("Urdu");
+        Language spanish = new Language();
+        spanish.setValue("Spanish");
+        List<Language> expected = Arrays.asList(english, urdu, spanish);
         List<Language> result = MovieUtil.languagesToList(input);
 
         assertThat(result)
@@ -83,13 +77,8 @@ public class MovieUtilTest {
                 .hasSameSizeAs(expected);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testLanguagesToList_Null_Param() {
-        MovieUtil.languagesToList(null);
-    }
-
     @Test
-    public void testLanguagesToList_EmptyCollectionInput() {
+    public void testLanguagesToListWhenEmptyCollectionInput() {
         List<Language> result = MovieUtil.languagesToList(Collections.emptyList());
         assertThat(result).isEmpty();
     }
@@ -104,13 +93,8 @@ public class MovieUtilTest {
         assertThat(result).isGreaterThan(123000).isEqualTo(expected);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testConvertVotesToInt_whenInputNull() {
-        MovieUtil.convertVotesToInt(null);
-    }
-
     @Test
-    public void testConvertVotesToInt_whenInputEmpty() {
+    public void testConvertVotesToIntWhenInputIsEmpty() {
         Integer result = MovieUtil.convertVotesToInt("");
         assertThat(result).isEqualTo(0);
     }
@@ -125,13 +109,8 @@ public class MovieUtilTest {
         assertThat(result).isInSameDayAs(expected);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testParseDate_whenInputNull() {
-        MovieUtil.parseDate(null);
-    }
-
     @Test
-    public void testParseDate_whenInvalidInputParameters() {
+    public void testParseDateWhenInvalidInputParameters() {
         String params = "asdfasdsdfddw3455ty";
 
         Date expected = Date.valueOf("1111-11-11");

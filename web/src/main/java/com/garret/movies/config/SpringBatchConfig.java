@@ -3,6 +3,7 @@ package com.garret.movies.config;
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.omdb.api.OmdbClient;
 import com.garret.movies.service.api.MovieService;
+import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -12,7 +13,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +21,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
+@AllArgsConstructor
 public class SpringBatchConfig {
 
-    @Autowired
     private MovieService movieService;
-
-    @Autowired
     private OmdbClient omdbClient;
 
     @Bean

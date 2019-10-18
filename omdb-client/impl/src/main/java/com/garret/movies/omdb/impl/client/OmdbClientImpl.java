@@ -2,6 +2,7 @@ package com.garret.movies.omdb.impl.client;
 
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.omdb.api.OmdbClient;
+import com.garret.movies.omdb.impl.exception.OmdbApiException;
 import com.garret.movies.omdb.impl.util.MovieUtil;
 import com.omertron.omdbapi.OMDBException;
 import com.omertron.omdbapi.OmdbApi;
@@ -9,10 +10,10 @@ import com.omertron.omdbapi.model.OmdbVideoBasic;
 import com.omertron.omdbapi.model.OmdbVideoFull;
 import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class OmdbClientImpl implements OmdbClient {
 
     private OmdbApi omdbApi;
-
-    @Autowired
-    public OmdbClientImpl(OmdbApi omdbApi) {
-        this.omdbApi = omdbApi;
-    }
 
     @Override
     @Transactional
@@ -54,7 +51,7 @@ public class OmdbClientImpl implements OmdbClient {
             return buildMovie(videoFromApi);
         } catch (OMDBException e) {
             log.error("Movie building was failed", e);
-            throw new RuntimeException("Something wrong in getFromApiById");
+            throw new OmdbApiException("Something wrong in getFromApiById");
         }
     }
 
