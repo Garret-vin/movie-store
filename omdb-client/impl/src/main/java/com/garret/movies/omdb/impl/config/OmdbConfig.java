@@ -4,15 +4,14 @@ import com.omertron.omdbapi.OmdbApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
+@PropertySource("classpath:/omdb.properties")
 public class OmdbConfig {
 
-    @Value("${api_key}")
-    private String API_KEY;
-
     @Bean
-    public OmdbApi omdbApi() {
-        return new OmdbApi(API_KEY);
+    public OmdbApi omdbApi(@Value("${api_key}") String apiKey) {
+        return new OmdbApi(apiKey);
     }
 }

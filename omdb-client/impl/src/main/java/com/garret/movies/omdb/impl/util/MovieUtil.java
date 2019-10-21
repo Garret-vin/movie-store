@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MovieUtil {
 
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
     private static final Pattern DATE_PATTERN =
             Pattern.compile("^(([0-9])|([0-2][0-9])|([3][0-1])) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4}$");
 
@@ -77,8 +78,6 @@ public class MovieUtil {
             return Date.valueOf("1111-11-11");
         }
         try {
-            String pattern = "dd MMM yyyy";
-            SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.ENGLISH);
             java.util.Date javaDate = formatter.parse(released);
             return new Date(javaDate.getTime());
         } catch (ParseException e) {

@@ -1,13 +1,11 @@
 package com.garret.movies.dao.entity;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@NoArgsConstructor
 @Table(name = "actor")
 public class Actor {
 

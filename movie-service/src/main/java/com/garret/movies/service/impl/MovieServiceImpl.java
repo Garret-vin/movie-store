@@ -4,7 +4,6 @@ import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
 import com.garret.movies.service.exception.IncorrectDateException;
-import com.google.inject.internal.util.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,28 +22,25 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private MovieRepository movieRepository;
 
     @Override
     @Transactional
     public Movie save(@NonNull Movie movie) {
-        Optional<Movie> optionalMovie = movieRepository.findByImdbId(movie.getImdbId());
-        if (optionalMovie.isPresent()) {
-            log.info(movie.getTitle() + " already present");
-            return optionalMovie.get();
-        }
-        log.info("Start saving movie " + movie.getTitle());
-        Movie savedMovie = movieRepository.save(movie);
-        log.info(movie.getTitle() + " was saved to database");
-        return savedMovie;
+        return movieRepository.findByImdbId(movie.getImdbId()).orElseGet(() -> {
+            log.info("Saving movie " + movie.getTitle());
+            return movieRepository.save(movie);
+        });
     }
 
     @Override
     @Transactional
     public List<Movie> saveAll(@NonNull List<Movie> movies) {
-        movieRepository.saveAll(movies);
-        log.info(movies.size() + " movies saved to database");
-        return movies;
+        List<Movie> movieList = new ArrayList<>();
+        log.info("Saving " + movies.size() + " movies to database");
+        movieRepository.saveAll(movies).forEach(movieList::add);
+        return movieList;
     }
 
     @Override
@@ -55,7 +52,9 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public List<Movie> getAll() {
-        return ImmutableList.copyOf(movieRepository.findAll());
+        List<Movie> result = new ArrayList<>();
+        movieRepository.findAll().forEach(result::add);
+        return result;
     }
 
     @Override
@@ -77,16 +76,15 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Movie> getAllByYear(@NonNull Integer year) {
+    public List<Movie> getAllByYear(int year) {
         String start = year + "-01-01";
         String end = year + "-12-31";
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date startDate = formatter.parse(start);
             Date endDate = formatter.parse(end);
             return movieRepository.findAllByReleasedBetween(startDate, endDate);
         } catch (ParseException e) {
-            log.error("Incorrect date in MovieServiceImpl.class throws from method: getAllByYear()", e);
+            log.error("Wrong year specified: " + year, e);
             throw new IncorrectDateException("Can't parse date from DB");
         }
     }
@@ -104,6 +102,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public void deleteAll() {
+        movieRepository.deleteAll();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Movie> getTopByVotes() {
         return movieRepository.findAllByOrderByImdbVotesDesc();
@@ -118,13 +121,9 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public boolean deleteById(@NonNull Long id) {
-        boolean isDeleted = false;
-        if (movieRepository.existsById(id)) {
-            movieRepository.deleteById(id);
-            isDeleted = true;
-        }
-        log.info("Deleted movie with id = " + id + " is " + isDeleted);
-        return isDeleted;
+        boolean result = movieRepository.removeById(id) > 0;
+        log.info("Delete movie with id = " + id + ": " + result);
+        return result;
     }
 
     @Override

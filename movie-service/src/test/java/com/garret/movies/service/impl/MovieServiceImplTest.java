@@ -73,6 +73,7 @@ public class MovieServiceImplTest {
 
     @Test
     public void saveAll() {
+        when(movieRepository.saveAll(anyIterable())).thenReturn(Collections.singletonList(movie));
         List<Movie> resultList = movieService.saveAll(Collections.singletonList(movie));
 
         assertThat(resultList)
@@ -309,22 +310,20 @@ public class MovieServiceImplTest {
 
     @Test
     public void deleteById() {
-        when(movieRepository.existsById(2L)).thenReturn(true);
+        when(movieRepository.removeById(2L)).thenReturn(1);
         boolean result = movieService.deleteById(movie.getId());
 
         assertThat(result).isTrue();
-        verify(movieRepository).existsById(movie.getId());
-        verify(movieRepository).deleteById(movie.getId());
+        verify(movieRepository).removeById(movie.getId());
     }
 
     @Test
     public void deleteByIdFailTest() {
-        when(movieRepository.existsById(anyLong())).thenReturn(false);
+        when(movieRepository.removeById(anyLong())).thenReturn(0);
         boolean result = movieService.deleteById(movie.getId());
 
         assertThat(result).isFalse();
-        verify(movieRepository).existsById(movie.getId());
-        verify(movieRepository, never()).deleteById(anyLong());
+        verify(movieRepository).removeById(anyLong());
     }
 
     @Test

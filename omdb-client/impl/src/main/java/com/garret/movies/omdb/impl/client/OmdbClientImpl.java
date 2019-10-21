@@ -10,37 +10,36 @@ import com.omertron.omdbapi.model.OmdbVideoBasic;
 import com.omertron.omdbapi.model.OmdbVideoFull;
 import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OmdbClientImpl implements OmdbClient {
 
-    private OmdbApi omdbApi;
+    private final OmdbApi omdbApi;
 
     @Override
     @Transactional
     public List<Movie> searchMovies(@NonNull String title) {
         try {
             List<OmdbVideoBasic> videoList = ListUtils.emptyIfNull(omdbApi.search(title).getResults());
-            return ListUtils.emptyIfNull(videoList.stream()
+            return videoList.stream()
                     .map(OmdbVideoBasic::getImdbID)
                     .map(this::getFromApiByImdbId)
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList());
         } catch (OMDBException e) {
             log.error("Invalid parameters", e);
+            throw new OmdbApiException("Something wrong in searchMovies()");
         }
-        return Collections.emptyList();
     }
 
     private Movie getFromApiByImdbId(@NonNull String imdbId) {
@@ -51,7 +50,7 @@ public class OmdbClientImpl implements OmdbClient {
             return buildMovie(videoFromApi);
         } catch (OMDBException e) {
             log.error("Movie building was failed", e);
-            throw new OmdbApiException("Something wrong in getFromApiById");
+            throw new OmdbApiException("Something wrong in getFromApiById()");
         }
     }
 

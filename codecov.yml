@@ -5,12 +5,3 @@ coverage:
   precision: 2
   round: down
   range: "70...100"
-  ignore:
-    - "dao/.*"
-    - "movie-service/src/main/java/com/garret/movies/service/api/.*"
-    - "movie-service/src/main/java/com/garret/movies/service/exception/.*"
-    - "omdb-client/api/.*"
-    - "omdb-client/impl/src/main/java/com/garret/movies/omdb/impl/config/.*"
-    - "omdb-client/impl/src/main/java/com/garret/movies/omdb/impl/exception/.*"
-    - "web/src/main/java/com/garret/movies/MovieApplication.java"
-    - "web/src/main/java/com/garret/movies/config/SwaggerConfig.java"

@@ -7,21 +7,21 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
 @Slf4j
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MovieOmdbController {
 
     private JobLauncher jobLauncher;
     private Job job;
 
-    @GetMapping("/search/{title}")
+    @PostMapping("/search/{title}")
     public BatchStatus searchMovies(@PathVariable("title") String title)
             throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
@@ -30,9 +30,9 @@ public class MovieOmdbController {
         parametersBuilder.addString("title", title);
         parametersBuilder.addLong("time", System.currentTimeMillis());
         JobParameters jobParameters = parametersBuilder.toJobParameters();
+
         JobExecution jobExecution = jobLauncher.run(job, jobParameters);
         log.info("Job execution status: " + jobExecution.getStatus());
-
         return jobExecution.getStatus();
     }
 }

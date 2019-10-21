@@ -26,4 +26,6 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
     List<Movie> findAllByCountry(String country);
 
     boolean existsByImdbId(String imdbId);
+
+    int removeById(Long id);
 }
