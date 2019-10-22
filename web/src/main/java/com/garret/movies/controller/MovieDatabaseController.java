@@ -42,7 +42,7 @@ public class MovieDatabaseController {
     }
 
     @GetMapping("/search")
-    public List<Movie> getAllByParams(@RequestParam MultiValueMap<String, String> params) {
+    public List<Movie> getAllByParams(@RequestParam(required = false) MultiValueMap<String, String> params) {
         List<Movie> response = new ArrayList<>(movieService.getAll());
         if (params.containsKey("genre")) {
             response.retainAll(movieService.getAllByGenre(params.getFirst("genre")));

@@ -163,7 +163,7 @@ public class MovieServiceImplTest {
         verify(movieRepository).findAllByGenresValue(GENRE);
     }
 
-    @Test
+    /*@Test
     public void getAllByActor() {
         when(movieRepository.findAllByActorsFullNameContains(ACTOR)).thenReturn(Collections.singletonList(movie));
         List<Movie> result = movieService.getAllByActor(ACTOR);
@@ -185,7 +185,7 @@ public class MovieServiceImplTest {
                 .isNotNull()
                 .isEmpty();
         verify(movieRepository).findAllByActorsFullNameContains(eq(ACTOR));
-    }
+    }*/
 
     @Test
     public void getAllByYear() {
