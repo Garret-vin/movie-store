@@ -80,7 +80,9 @@
                 <configuration>
                     <excludes>
                         <exclude>**/com/garret/movies/MovieApplication.class</exclude>
-                        <exclude>**/com/garret/movies/dao/**/*</exclude>
+                        <exclude>**/com/garret/movies/dao/entity/**/*</exclude>
+                        <exclude>**/com/garret/movies/dao/jooq/**/*</exclude>
+                        <exclude>**/com/garret/movies/dao/repository/**/*</exclude>
                         <exclude>**/*exception/**/*</exclude>
                         <exclude>**/*config/**/*</exclude>
                     </excludes>

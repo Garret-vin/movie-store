@@ -1,9 +1,6 @@
 package com.garret.movies.service.impl;
 
-import com.garret.movies.dao.entity.Actor;
-import com.garret.movies.dao.entity.Genre;
-import com.garret.movies.dao.entity.Language;
-import com.garret.movies.dao.entity.Movie;
+import com.garret.movies.dao.entity.*;
 import com.garret.movies.dao.repository.MovieRepository;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,7 +29,9 @@ public class MovieServiceImplTest {
         movie = new Movie();
         movie.setId(2L);
         movie.setImdbId("tt223344");
-        movie.setCountry(Collections.singletonList("USA"));
+        Country country = new Country();
+        country.setName("USA");
+        movie.setCountries(Collections.singletonList(country));
         Genre genre = new Genre();
         genre.setValue("Action");
         movie.setGenres(Collections.singletonList(genre));
@@ -163,7 +162,7 @@ public class MovieServiceImplTest {
         verify(movieRepository).findAllByGenresValue(GENRE);
     }
 
-    /*@Test
+    @Test
     public void getAllByActor() {
         when(movieRepository.findAllByActorsFullNameContains(ACTOR)).thenReturn(Collections.singletonList(movie));
         List<Movie> result = movieService.getAllByActor(ACTOR);
@@ -185,7 +184,8 @@ public class MovieServiceImplTest {
                 .isNotNull()
                 .isEmpty();
         verify(movieRepository).findAllByActorsFullNameContains(eq(ACTOR));
-    }*/
+    }
+
 
     @Test
     public void getAllByYear() {
@@ -241,25 +241,25 @@ public class MovieServiceImplTest {
 
     @Test
     public void getAllByCountry() {
-        when(movieRepository.findAllByCountry(COUNTRY)).thenReturn(Collections.singletonList(movie));
+        when(movieRepository.findAllByCountriesName(COUNTRY)).thenReturn(Collections.singletonList(movie));
         List<Movie> result = movieService.getAllByCountry(COUNTRY);
 
         assertThat(result)
                 .isNotNull()
                 .isNotEmpty()
                 .containsOnly(movie);
-        verify(movieRepository).findAllByCountry(eq(COUNTRY));
+        verify(movieRepository).findAllByCountriesName(eq(COUNTRY));
     }
 
     @Test
     public void getAllByCountryWhenEmptyResultReturn() {
-        when(movieRepository.findAllByCountry(COUNTRY)).thenReturn(Collections.emptyList());
+        when(movieRepository.findAllByCountriesName(COUNTRY)).thenReturn(Collections.emptyList());
         List<Movie> result = movieService.getAllByCountry(COUNTRY);
 
         assertThat(result)
                 .isNotNull()
                 .isEmpty();
-        verify(movieRepository).findAllByCountry(eq(COUNTRY));
+        verify(movieRepository).findAllByCountriesName(eq(COUNTRY));
     }
 
     @Test
@@ -329,7 +329,7 @@ public class MovieServiceImplTest {
     @Test
     public void existsInDb() {
         when(movieRepository.existsByImdbId(movie.getImdbId())).thenReturn(true);
-        boolean result = movieService.existsInDb(movie);
+        boolean result = movieService.existsByImdbId(movie.getImdbId());
 
         assertThat(result).isTrue();
         verify(movieRepository).existsByImdbId(movie.getImdbId());
@@ -338,7 +338,7 @@ public class MovieServiceImplTest {
     @Test
     public void existsInDbFailTest() {
         when(movieRepository.existsByImdbId(movie.getImdbId())).thenReturn(false);
-        boolean result = movieService.existsInDb(movie);
+        boolean result = movieService.existsByImdbId(movie.getImdbId());
 
         assertThat(result).isFalse();
         verify(movieRepository).existsByImdbId(movie.getImdbId());

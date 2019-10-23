@@ -31,7 +31,7 @@ public interface MovieService {
 
     boolean deleteById(Long id);
 
-    boolean existsInDb(Movie movie);
+    boolean existsByImdbId(String imdbId);
 
     List<Movie> getAllByCountry(String country);
 

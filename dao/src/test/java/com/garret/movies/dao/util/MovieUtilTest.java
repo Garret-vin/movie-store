@@ -1,13 +1,13 @@
-package com.garret.movies.omdb.impl.util;
+package com.garret.movies.dao.util;
 
 import com.garret.movies.dao.entity.Actor;
+import com.garret.movies.dao.entity.Country;
 import com.garret.movies.dao.entity.Genre;
 import com.garret.movies.dao.entity.Language;
 import org.junit.Test;
 
 import java.sql.Date;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,7 +61,7 @@ public class MovieUtilTest {
 
     @Test
     public void testLanguagesToList() {
-        List<String> input = Arrays.asList("English", "Urdu", "Spanish");
+        String input = "English, Urdu, Spanish";
         Language english = new Language();
         english.setValue("English");
         Language urdu = new Language();
@@ -79,7 +79,7 @@ public class MovieUtilTest {
 
     @Test
     public void testLanguagesToListWhenEmptyCollectionInput() {
-        List<Language> result = MovieUtil.languagesToList(Collections.emptyList());
+        List<Language> result = MovieUtil.languagesToList("");
         assertThat(result).isEmpty();
     }
 
@@ -88,14 +88,14 @@ public class MovieUtilTest {
         String input = "123,456";
 
         Integer expected = 123456;
-        Integer result = MovieUtil.convertVotesToInt(input);
+        Integer result = MovieUtil.convertStringToInteger(input);
 
         assertThat(result).isGreaterThan(123000).isEqualTo(expected);
     }
 
     @Test
     public void testConvertVotesToIntWhenInputIsEmpty() {
-        Integer result = MovieUtil.convertVotesToInt("");
+        Integer result = MovieUtil.convertStringToInteger("");
         assertThat(result).isEqualTo(0);
     }
 
@@ -117,5 +117,28 @@ public class MovieUtilTest {
         Date result = MovieUtil.parseDate(params);
 
         assertThat(result).isInSameDayAs(expected);
+    }
+
+    @Test
+    public void testCountiesToList() {
+        String input = "USA, India";
+        Country usa = new Country();
+        usa.setName("USA");
+        Country india = new Country();
+        india.setName("India");
+
+        List<Country> expected = Arrays.asList(usa, india);
+        List<Country> result = MovieUtil.countiesToList(input);
+
+        assertThat(result)
+                .isNotEmpty()
+                .containsAll(expected)
+                .hasSameSizeAs(expected);
+    }
+
+    @Test
+    public void testCountriesToListWhenEmptyCollectionInput() {
+        List<Country> result = MovieUtil.countiesToList("");
+        assertThat(result).isEmpty();
     }
 }

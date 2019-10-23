@@ -98,7 +98,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public List<Movie> getAllByCountry(@NonNull String country) {
-        return movieRepository.findAllByCountry(country);
+        return movieRepository.findAllByCountriesName(country);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existsInDb(@NonNull Movie movie) {
-        return movieRepository.existsByImdbId(movie.getImdbId());
+    public boolean  existsByImdbId(@NonNull String imdbId) {
+        return movieRepository.existsByImdbId(imdbId);
     }
 }

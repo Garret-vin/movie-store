@@ -23,7 +23,7 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
 
     List<Movie> findAllByOrderByImdbRatingDesc();
 
-    List<Movie> findAllByCountry(String country);
+    List<Movie> findAllByCountriesName(String country);
 
     boolean existsByImdbId(String imdbId);
 

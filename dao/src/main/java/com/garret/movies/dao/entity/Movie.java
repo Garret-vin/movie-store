@@ -1,45 +1,63 @@
 package com.garret.movies.dao.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.garret.movies.dao.util.MovieUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "movie")
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Table(name = "movie")
 public class Movie {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
     private Date released;
-    private String runtime;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Genre> genres;
-    private String director;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Actor> actors;
-    @Column(length = 1024)
-    private String plot;
-    private String type;
-    @Column(nullable = false)
-    private String imdbId;
     private Double imdbRating;
     private Integer imdbVotes;
+    @JsonProperty("Title")
+    private String title;
+    @JsonProperty("Runtime")
+    private String runtime;
+    @JsonProperty("Director")
+    private String director;
+    @JsonProperty("Plot")
+    @Column(length = 1024)
+    private String plot;
+    @JsonProperty("Type")
+    private String type;
+    @JsonProperty("imdbID")
+    @Column(nullable = false)
+    private String imdbId;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Genre> genres;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Actor> actors;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Language> languages;
-    @ElementCollection
-    @CollectionTable(name = "country", joinColumns = @JoinColumn(name = "movie_id"))
-    @Column(name = "country")
-    private List<String> country;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Country> countries;
+
+    public Movie(@JsonProperty("Released") String released,
+                 @JsonProperty("imdbVotes") String imdbVotes,
+                 @JsonProperty("Genre") String genres,
+                 @JsonProperty("Actors") String actors,
+                 @JsonProperty("Language") String languages,
+                 @JsonProperty("Country") String counties,
+                 @JsonProperty("imdbRating") String imdbRating) {
+        this.released = MovieUtil.parseDate(released);
+        this.imdbVotes = MovieUtil.convertStringToInteger(imdbVotes);
+        this.genres = MovieUtil.genresToList(genres);
+        this.actors = MovieUtil.actorsToList(actors);
+        this.languages = MovieUtil.languagesToList(languages);
+        this.countries = MovieUtil.countiesToList(counties);
+        this.imdbRating = MovieUtil.convertStringToDouble(imdbRating);
+    }
 }

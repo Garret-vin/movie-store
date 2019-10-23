@@ -1,10 +1,11 @@
-package com.garret.movies.omdb.impl.util;
+package com.garret.movies.dao.util;
 
 
 import com.garret.movies.dao.entity.Actor;
+import com.garret.movies.dao.entity.Country;
 import com.garret.movies.dao.entity.Genre;
 import com.garret.movies.dao.entity.Language;
-import com.garret.movies.omdb.impl.exception.IncorrectDateException;
+import com.garret.movies.dao.exception.IncorrectDateException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Date;
@@ -23,6 +24,8 @@ public class MovieUtil {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
     private static final Pattern DATE_PATTERN =
             Pattern.compile("^(([0-9])|([0-2][0-9])|([3][0-1])) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4}$");
+    private static final Pattern DOUBLE_PATTERN =
+            Pattern.compile("[0-9]{1,13}(\\.[0-9]*)?");
 
     public static List<Actor> actorsToList(String actors) {
         if (actors.isEmpty()) {
@@ -50,8 +53,11 @@ public class MovieUtil {
                 }).collect(Collectors.toList());
     }
 
-    public static List<Language> languagesToList(List<String> languageList) {
-        return languageList.stream()
+    public static List<Language> languagesToList(String languages) {
+        if (languages.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(languages.split(","))
                 .map(String::trim)
                 .map(lang -> {
                     Language language = new Language();
@@ -60,8 +66,9 @@ public class MovieUtil {
                 }).collect(Collectors.toList());
     }
 
-    public static Integer convertVotesToInt(String votes) {
-        if (votes.isEmpty()) {
+    public static Integer convertStringToInteger(String votes) {
+        if (votes.isEmpty() || votes.equals("N/A")) {
+            log.info("Number of votes not found, default value was set");
             return 0;
         }
         String[] splitArray = votes.split(",");
@@ -84,5 +91,27 @@ public class MovieUtil {
             log.warn("Can't parse date", e);
             throw new IncorrectDateException("Date parsing was failed");
         }
+    }
+
+    public static List<Country> countiesToList(String counties) {
+        if (counties.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Arrays.stream(counties.split(","))
+                .map(String::trim)
+                .map(c -> {
+                    Country country = new Country();
+                    country.setName(c);
+                    return country;
+                }).collect(Collectors.toList());
+
+    }
+
+    public static Double convertStringToDouble(String imdbRating) {
+        if (!DOUBLE_PATTERN.matcher(imdbRating).matches()) {
+            log.info("Can't parse imdbRating, default value was set");
+            return 0.0;
+        }
+        return Double.parseDouble(imdbRating);
     }
 }

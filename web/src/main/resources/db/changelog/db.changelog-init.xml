@@ -1,9 +1,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
-    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="1" author="Garret">
         <createTable tableName="genre">
@@ -34,17 +32,11 @@
 
     <changeSet id="11" author="Garret">
         <createTable tableName="country">
-            <column name="movie_id" type="BIGINT">
-                <constraints nullable="false"/>
+            <column name="id" autoIncrement="true" type="BIGINT">
+                <constraints primaryKey="true"/>
             </column>
-            <column name="country" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
         </createTable>
-    </changeSet>
-    
-    <changeSet id="12" author="Garret">
-        <createIndex tableName="country" indexName="country_index">
-            <column name="movie_id"/>
-        </createIndex>
     </changeSet>
 
     <changeSet id="3" author="Garret">
@@ -113,6 +105,23 @@
 
     <changeSet id="10" author="Garret">
         <createIndex tableName="movie_languages" indexName="movie_languages_index">
+            <column name="movie_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="12" author="Garret">
+        <createTable tableName="movie_countries">
+            <column name="movie_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="countries_id" type="BIGINT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="13" author="Garret">
+        <createIndex tableName="movie_countries" indexName="movie_counties_index">
             <column name="movie_id"/>
         </createIndex>
     </changeSet>
