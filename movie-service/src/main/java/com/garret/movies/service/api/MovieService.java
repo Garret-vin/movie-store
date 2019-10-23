@@ -25,6 +25,8 @@ public interface MovieService {
 
     List<Movie> getAllByLanguage(String language);
 
+    List<Movie> getAllByCountry(String country);
+
     List<Movie> getTopByVotes();
 
     List<Movie> getTopByRating();
@@ -32,8 +34,6 @@ public interface MovieService {
     boolean deleteById(Long id);
 
     boolean existsByImdbId(String imdbId);
-
-    List<Movie> getAllByCountry(String country);
 
     void deleteAll();
 }

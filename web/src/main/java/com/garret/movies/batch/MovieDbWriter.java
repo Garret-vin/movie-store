@@ -15,7 +15,6 @@ public class MovieDbWriter implements ItemWriter<Movie> {
 
     private final MovieService movieService;
 
-
     @Override
     public void write(List<? extends Movie> list) throws Exception {
         List<Movie> result = new ArrayList<>(list);

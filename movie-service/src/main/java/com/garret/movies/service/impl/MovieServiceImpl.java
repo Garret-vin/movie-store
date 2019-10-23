@@ -102,11 +102,6 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void deleteAll() {
-        movieRepository.deleteAll();
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<Movie> getTopByVotes() {
         return movieRepository.findAllByOrderByImdbVotesDesc();
@@ -128,7 +123,12 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean  existsByImdbId(@NonNull String imdbId) {
+    public boolean existsByImdbId(@NonNull String imdbId) {
         return movieRepository.existsByImdbId(imdbId);
+    }
+
+    @Override
+    public void deleteAll() {
+        movieRepository.deleteAll();
     }
 }
