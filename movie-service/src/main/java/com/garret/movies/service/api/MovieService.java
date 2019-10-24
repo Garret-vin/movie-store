@@ -3,6 +3,7 @@ package com.garret.movies.service.api;
 import com.garret.movies.dao.entity.Movie;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface MovieService {
@@ -13,23 +14,7 @@ public interface MovieService {
 
     Optional<Movie> getById(Long id);
 
-    List<Movie> getAll();
-
-    Optional<Movie> getByImdbId(String imdbId);
-
-    List<Movie> getAllByGenre(String genre);
-
-    List<Movie> getAllByActor(String actor);
-
-    List<Movie> getAllByYear(int year);
-
-    List<Movie> getAllByLanguage(String language);
-
-    List<Movie> getAllByCountry(String country);
-
-    List<Movie> getTopByVotes();
-
-    List<Movie> getTopByRating();
+    List<Movie> getAllByParams(Map<String, String> params);
 
     boolean deleteById(Long id);
 

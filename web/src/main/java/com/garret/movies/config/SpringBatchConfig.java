@@ -36,6 +36,8 @@ public class SpringBatchConfig {
     private MovieService movieService;
     private OmdbClient omdbClient;
     private JobRepository jobRepository;
+    private JobBuilderFactory jobBuilderFactory;
+    private StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public TaskExecutor threadPoolTaskExecutor() {
@@ -56,40 +58,41 @@ public class SpringBatchConfig {
     }
 
     @Bean
-    public Job job(JobBuilderFactory jobBuilderFactory,
-                   StepBuilderFactory stepBuilderFactory,
-                   ItemReader<ShortMovie> itemReader,
-                   ItemProcessor<ShortMovie, Movie> itemProcessor,
-                   ItemWriter<Movie> itemWriter) {
-
-        Step step = stepBuilderFactory.get("OMBD-collection-load")
-                .<ShortMovie, Movie>chunk(100)
-                .reader(itemReader)
-                .processor(itemProcessor)
-                .writer(itemWriter)
-                .build();
-
+    public Job job(Step step) {
         return jobBuilderFactory.get("OMDB-load")
                 .start(step)
                 .build();
     }
 
     @Bean
-    @StepScope
-    public ItemReader<ShortMovie> itemReader(@Value("#{jobParameters[title]}") String title) {
-        List<ShortMovie> response = omdbClient.searchMovies(title);
-        return new ShortMovieReader(response);
+    public Step step(ItemReader<ShortMovie> itemReader,
+                     ItemProcessor<ShortMovie, Movie> itemProcessor,
+                     ItemWriter<Movie> itemWriter) {
+
+        return stepBuilderFactory.get("OMBD-collection-load")
+                .<ShortMovie, Movie>chunk(100)
+                .reader(itemReader)
+                .processor(itemProcessor)
+                .writer(itemWriter)
+                .build();
     }
 
     @Bean
     @StepScope
-    public ItemProcessor<ShortMovie, Movie> itemProcessor() {
+    public ItemReader<ShortMovie> reader(@Value("#{jobParameters['title']}") String title) {
+        List<ShortMovie> shortMovieList = omdbClient.searchMovies(title);
+        return new ShortMovieReader(shortMovieList);
+    }
+
+    @Bean
+    @StepScope
+    public ItemProcessor<ShortMovie, Movie> processor() {
         return new ShortMovieToMovieProcessor(omdbClient, movieService);
     }
 
     @Bean
     @StepScope
-    public ItemWriter writer() {
+    public ItemWriter<Movie> writer() {
         return new MovieDbWriter(movieService);
     }
 }

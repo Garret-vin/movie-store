@@ -13,6 +13,7 @@
     <artifactId>dao</artifactId>
 
     <dependencies>
+        <!--Spring Data-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -35,14 +36,11 @@
 
         <!-- jOOQ -->
         <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jooq</artifactId>
         </dependency>
 
+        <!--Jackson-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-json</artifactId>
@@ -57,7 +55,7 @@
 
     <build>
         <plugins>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
                 <version>1.0.0</version>
@@ -106,7 +104,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 
         </plugins>
     </build>

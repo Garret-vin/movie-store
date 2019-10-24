@@ -4,12 +4,10 @@ import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.service.api.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 @RequiredArgsConstructor
 public class MovieDbWriter implements ItemWriter<Movie> {
 
@@ -21,3 +19,4 @@ public class MovieDbWriter implements ItemWriter<Movie> {
         movieService.saveAll(result);
     }
 }
+

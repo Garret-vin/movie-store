@@ -6,9 +6,7 @@ import com.garret.movies.omdb.api.OmdbClient;
 import com.garret.movies.service.api.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public class ShortMovieToMovieProcessor implements ItemProcessor<ShortMovie, Movie> {
 

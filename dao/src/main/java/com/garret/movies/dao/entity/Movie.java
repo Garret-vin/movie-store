@@ -19,22 +19,29 @@ public class Movie {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "released")
     private Date released;
+    @Column(name = "imdb_rating")
     private Double imdbRating;
+    @Column(name = "imdb_votes")
     private Integer imdbVotes;
     @JsonProperty("Title")
+    @Column(name = "title")
     private String title;
     @JsonProperty("Runtime")
+    @Column(name = "runtime")
     private String runtime;
     @JsonProperty("Director")
+    @Column(name = "director")
     private String director;
     @JsonProperty("Plot")
-    @Column(length = 1024)
+    @Column(name = "plot", length = 1024)
     private String plot;
     @JsonProperty("Type")
+    @Column(name = "type")
     private String type;
     @JsonProperty("imdbID")
-    @Column(nullable = false)
+    @Column(name = "imdb_id", nullable = false)
     private String imdbId;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Genre> genres;

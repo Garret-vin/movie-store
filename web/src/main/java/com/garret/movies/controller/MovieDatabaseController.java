@@ -5,12 +5,10 @@ import com.garret.movies.service.api.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,33 +40,7 @@ public class MovieDatabaseController {
     }
 
     @GetMapping("/search")
-    public List<Movie> getAllByParams(@RequestParam(required = false) MultiValueMap<String, String> params) {
-        List<Movie> response = new ArrayList<>(movieService.getAll());
-        if (params.containsKey("genre")) {
-            response.retainAll(movieService.getAllByGenre(params.getFirst("genre")));
-        }
-        if (params.containsKey("language")) {
-            response.retainAll(movieService.getAllByLanguage(params.getFirst("language")));
-        }
-        if (params.containsKey("actor")) {
-            response.retainAll(movieService.getAllByActor(params.getFirst("actor")));
-        }
-        if (params.containsKey("year")) {
-            response.retainAll(movieService.getAllByYear(Integer.parseInt(Objects.requireNonNull(params.getFirst("year")))));
-        }
-        if (params.containsKey("country")) {
-            response.retainAll(movieService.getAllByCountry(params.getFirst("country")));
-        }
-        return response;
-    }
-
-    @GetMapping("/top-votes")
-    public List<Movie> getTopByVotes() {
-        return movieService.getTopByVotes();
-    }
-
-    @GetMapping("/top-rating")
-    public List<Movie> getTopByRating() {
-        return movieService.getTopByRating();
+    public List<Movie> getAllByParams(@RequestParam(required = false) Map<String, String> params) {
+        return movieService.getAllByParams(params);
     }
 }
