@@ -85,10 +85,10 @@
                         </goals>
                         <configuration>
                             <jdbc>
-                                <driver>${spring.datasource.driver-class-name}</driver>
-                                <url>${spring.datasource.url}</url>
-                                <user>${spring.datasource.username}</user>
-                                <password>${spring.datasource.password}</password>
+                                <driver>com.mysql.cj.jdbc.Driver</driver>
+                                <url>jdbc:mysql://localhost:3306/movieStore</url>
+                                <user>root</user>
+                                <password>rootroot</password>
                             </jdbc>
                             <generator>
                                 <target>
