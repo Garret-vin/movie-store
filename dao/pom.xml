@@ -83,27 +83,28 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
-                        <configuration>
-                            <jdbc>
-                                <driver>com.mysql.cj.jdbc.Driver</driver>
-                                <url>jdbc:mysql://localhost:3306/movieStore</url>
-                                <user>root</user>
-                                <password>rootroot</password>
-                            </jdbc>
-                            <generator>
-                                <target>
-                                    <packageName>com.garret.movies.dao.jooq.generated</packageName>
-                                    <directory>src/main/java</directory>
-                                </target>
-                                <database>
-                                    <name>org.jooq.meta.mysql.MySQLDatabase</name>
-                                    <excludes>BATCH_.*|DATABASECHANGELOG.*</excludes>
-                                    <inputSchema>movieStore</inputSchema>
-                                </database>
-                            </generator>
-                        </configuration>
+
                     </execution>
                 </executions>
+                <configuration>
+                    <jdbc>
+                        <driver>com.mysql.cj.jdbc.Driver</driver>
+                        <url>jdbc:mysql://localhost:3306/movieStore</url>
+                        <user>root</user>
+                        <password>rootroot</password>
+                    </jdbc>
+                    <generator>
+                        <target>
+                            <packageName>com.garret.movies.dao.jooq.generated</packageName>
+                            <directory>src/main/java</directory>
+                        </target>
+                        <database>
+                            <name>org.jooq.meta.mysql.MySQLDatabase</name>
+                            <excludes>BATCH_.*|DATABASECHANGELOG.*</excludes>
+                            <inputSchema>movieStore</inputSchema>
+                        </database>
+                    </generator>
+                </configuration>
             </plugin>
 
         </plugins>
