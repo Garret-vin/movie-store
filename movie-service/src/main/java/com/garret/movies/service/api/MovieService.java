@@ -1,35 +1,21 @@
 package com.garret.movies.service.api;
 
-import com.garret.movies.dao.entity.Movie;
+import com.garret.movies.service.dto.MovieDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
 
-    Movie save(Movie movie);
+    MovieDto save(MovieDto movie);
 
-    List<Movie> saveAll(List<Movie> movies);
+    List<MovieDto> saveAll(List<MovieDto> movies);
 
-    Optional<Movie> getById(Long id);
+    Optional<MovieDto> getById(Long id);
 
-    List<Movie> getAll();
+    List<MovieDto> getAll();
 
-    Optional<Movie> getByImdbId(String imdbId);
-
-    List<Movie> getAllByGenre(String genre);
-
-    List<Movie> getAllByActor(String actor);
-
-    List<Movie> getAllByYear(int year);
-
-    List<Movie> getAllByLanguage(String language);
-
-    List<Movie> getAllByCountry(String country);
-
-    List<Movie> getTopByVotes();
-
-    List<Movie> getTopByRating();
+    Optional<MovieDto> getByImdbId(String imdbId);
 
     boolean deleteById(Long id);
 

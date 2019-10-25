@@ -1,11 +1,11 @@
-package com.garret.movies.dao.util;
+package com.garret.movies.service.util;
 
-
-import com.garret.movies.dao.entity.Actor;
-import com.garret.movies.dao.entity.Country;
-import com.garret.movies.dao.entity.Genre;
-import com.garret.movies.dao.entity.Language;
 import com.garret.movies.dao.exception.IncorrectDateException;
+import com.garret.movies.service.dto.ActorDto;
+import com.garret.movies.service.dto.CountryDto;
+import com.garret.movies.service.dto.GenreDto;
+import com.garret.movies.service.dto.LanguageDto;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Date;
@@ -27,40 +27,40 @@ public class MovieUtil {
     private static final Pattern DOUBLE_PATTERN =
             Pattern.compile("[0-9]{1,13}(\\.[0-9]*)?");
 
-    public static List<Actor> actorsToList(String actors) {
+    public static List<ActorDto> actorsToList(String actors) {
         if (actors.isEmpty()) {
             return Collections.emptyList();
         }
         return Arrays.stream(actors.split(","))
                 .map(String::trim)
                 .map(name -> {
-                    Actor actor = new Actor();
+                    ActorDto actor = new ActorDto();
                     actor.setFullName(name);
                     return actor;
                 }).collect(Collectors.toList());
     }
 
-    public static List<Genre> genresToList(String genres) {
+    public static List<GenreDto> genresToList(String genres) {
         if (genres.isEmpty()) {
             return Collections.emptyList();
         }
         return Arrays.stream(genres.split(","))
                 .map(String::trim)
                 .map(genreTitle -> {
-                    Genre genre = new Genre();
+                    GenreDto genre = new GenreDto();
                     genre.setValue(genreTitle);
                     return genre;
                 }).collect(Collectors.toList());
     }
 
-    public static List<Language> languagesToList(String languages) {
+    public static List<LanguageDto> languagesToList(String languages) {
         if (languages.isEmpty()) {
             return Collections.emptyList();
         }
         return Arrays.stream(languages.split(","))
                 .map(String::trim)
                 .map(lang -> {
-                    Language language = new Language();
+                    LanguageDto language = new LanguageDto();
                     language.setValue(lang);
                     return language;
                 }).collect(Collectors.toList());
@@ -93,14 +93,14 @@ public class MovieUtil {
         }
     }
 
-    public static List<Country> countiesToList(String counties) {
+    public static List<CountryDto> countiesToList(String counties) {
         if (counties.isEmpty()) {
             return Collections.emptyList();
         }
         return Arrays.stream(counties.split(","))
                 .map(String::trim)
                 .map(c -> {
-                    Country country = new Country();
+                    CountryDto country = new CountryDto();
                     country.setName(c);
                     return country;
                 }).collect(Collectors.toList());

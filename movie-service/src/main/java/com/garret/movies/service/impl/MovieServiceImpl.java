@@ -3,19 +3,21 @@ package com.garret.movies.service.impl;
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
-import com.garret.movies.service.exception.IncorrectDateException;
+import com.garret.movies.service.dto.MovieDto;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,94 +26,56 @@ public class MovieServiceImpl implements MovieService {
 
     private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private MovieRepository movieRepository;
+    private ModelMapper modelMapper;
 
     @Override
     @Transactional
-    public Movie save(@NonNull Movie movie) {
-        return movieRepository.findByImdbId(movie.getImdbId()).orElseGet(() -> {
-            log.info("Saving movie " + movie.getTitle());
-            return movieRepository.save(movie);
+    public MovieDto save(@NonNull MovieDto movieDto) {
+        return movieRepository.findByImdbId(movieDto.getImdbId()).map(this::convertToDto).orElseGet(() -> {
+            log.info("Saving movie " + movieDto.getTitle());
+            Movie movie = convertToEntity(movieDto);
+            Movie savedMovie = movieRepository.save(movie);
+            return convertToDto(savedMovie);
         });
     }
 
     @Override
     @Transactional
-    public List<Movie> saveAll(@NonNull List<Movie> movies) {
-        List<Movie> movieList = new ArrayList<>();
-        log.info("Saving " + movies.size() + " movies to database");
-        movieRepository.saveAll(movies).forEach(movieList::add);
-        return movieList;
+    public List<MovieDto> saveAll(@NonNull List<MovieDto> movieDtoList) {
+        List<Movie> movieList = movieDtoList.stream()
+                .map(this::convertToEntity)
+                .collect(Collectors.toList());
+        log.info("Saving " + movieList.size() + " movies to database");
+        List<Movie> savedMovies = new ArrayList<>();
+        movieRepository.saveAll(movieList).forEach(savedMovies::add);
+        return savedMovies.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Movie> getById(@NonNull Long id) {
-        return movieRepository.findById(id);
+    public Optional<MovieDto> getById(@NonNull Long id) {
+        Optional<Movie> movieFromDb = movieRepository.findById(id);
+        MovieDto movieDTO = modelMapper.map(movieFromDb, MovieDto.class);//TODO java 8 style
+        return Optional.of(movieDTO);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Movie> getAll() {
+    public List<MovieDto> getAll() {
         List<Movie> result = new ArrayList<>();
         movieRepository.findAll().forEach(result::add);
-        return result;
+        Type listType = new TypeToken<List<MovieDto>>() {}.getType();
+        return modelMapper.map(result, listType);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Movie> getByImdbId(@NonNull String imdbId) {
-        return movieRepository.findByImdbId(imdbId);
+    public Optional<MovieDto> getByImdbId(@NonNull String imdbId) {
+        return movieRepository.findByImdbId(imdbId).map(this::convertToDto);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Movie> getAllByGenre(@NonNull String genre) {
-        return movieRepository.findAllByGenresValue(genre);
-    }
-
-    @Override
-    public List<Movie> getAllByActor(@NonNull String actor) {
-        return movieRepository.findAllByActorsFullNameContains(actor);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Movie> getAllByYear(int year) {
-        String start = year + "-01-01";
-        String end = year + "-12-31";
-        try {
-            Date startDate = formatter.parse(start);
-            Date endDate = formatter.parse(end);
-            return movieRepository.findAllByReleasedBetween(startDate, endDate);
-        } catch (ParseException e) {
-            log.error("Wrong year specified: " + year, e);
-            throw new IncorrectDateException("Can't parse date from DB");
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Movie> getAllByLanguage(@NonNull String language) {
-        return movieRepository.findAllByLanguagesValue(language);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Movie> getAllByCountry(@NonNull String country) {
-        return movieRepository.findAllByCountriesName(country);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Movie> getTopByVotes() {
-        return movieRepository.findAllByOrderByImdbVotesDesc();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Movie> getTopByRating() {
-        return movieRepository.findAllByOrderByImdbRatingDesc();
-    }
 
     @Override
     @Transactional
@@ -128,7 +92,16 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public void deleteAll() {
         movieRepository.deleteAll();
+    }
+
+    public MovieDto convertToDto(Movie movie) {
+        return modelMapper.map(movie, MovieDto.class);
+    }
+
+    public Movie convertToEntity(MovieDto movieDTO) {
+        return modelMapper.map(movieDTO, Movie.class);
     }
 }

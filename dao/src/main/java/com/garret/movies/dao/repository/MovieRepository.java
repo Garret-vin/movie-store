@@ -11,20 +11,6 @@ public interface MovieRepository extends CrudRepository<Movie, Long> {
 
     Optional<Movie> findByImdbId(String imdbId);
 
-    List<Movie> findAllByGenresValue(String genre);
-
-    List<Movie> findAllByActorsFullNameContains(String actor);
-
-    List<Movie> findAllByReleasedBetween(Date start, Date end);
-
-    List<Movie> findAllByLanguagesValue(String language);
-
-    List<Movie> findAllByOrderByImdbVotesDesc();
-
-    List<Movie> findAllByOrderByImdbRatingDesc();
-
-    List<Movie> findAllByCountriesName(String country);
-
     boolean existsByImdbId(String imdbId);
 
     int removeById(Long id);

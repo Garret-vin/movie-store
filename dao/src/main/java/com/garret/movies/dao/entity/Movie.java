@@ -1,9 +1,6 @@
 package com.garret.movies.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.garret.movies.dao.util.MovieUtil;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +8,6 @@ import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor
 @Table(name = "movie")
 public class Movie {
 
@@ -22,18 +18,12 @@ public class Movie {
     private Date released;
     private Double imdbRating;
     private Integer imdbVotes;
-    @JsonProperty("Title")
     private String title;
-    @JsonProperty("Runtime")
     private String runtime;
-    @JsonProperty("Director")
     private String director;
-    @JsonProperty("Plot")
     @Column(length = 1024)
     private String plot;
-    @JsonProperty("Type")
     private String type;
-    @JsonProperty("imdbID")
     @Column(nullable = false)
     private String imdbId;
     @OneToMany(cascade = CascadeType.ALL)
@@ -44,20 +34,4 @@ public class Movie {
     private List<Language> languages;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Country> countries;
-
-    public Movie(@JsonProperty("Released") String released,
-                 @JsonProperty("imdbVotes") String imdbVotes,
-                 @JsonProperty("Genre") String genres,
-                 @JsonProperty("Actors") String actors,
-                 @JsonProperty("Language") String languages,
-                 @JsonProperty("Country") String counties,
-                 @JsonProperty("imdbRating") String imdbRating) {
-        this.released = MovieUtil.parseDate(released);
-        this.imdbVotes = MovieUtil.convertStringToInteger(imdbVotes);
-        this.genres = MovieUtil.genresToList(genres);
-        this.actors = MovieUtil.actorsToList(actors);
-        this.languages = MovieUtil.languagesToList(languages);
-        this.countries = MovieUtil.countiesToList(counties);
-        this.imdbRating = MovieUtil.convertStringToDouble(imdbRating);
-    }
 }

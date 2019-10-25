@@ -1,9 +1,11 @@
 package com.garret.movies.controller;
 
-import com.garret.movies.dao.entity.Movie;
+import com.garret.movies.omdb.dto.OmdbMovie;
 import com.garret.movies.omdb.impl.client.OmdbClientDTOImpl;
 import com.garret.movies.service.api.MovieService;
+import com.garret.movies.service.dto.MovieDto;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class MovieOmdbDtoController {
 
+    private ModelMapper modelMapper;
     private OmdbClientDTOImpl omdbClient;
     private MovieService movieService;
     private JobLauncher jobLauncher;
@@ -30,7 +33,7 @@ public class MovieOmdbDtoController {
 
     @Async
     @GetMapping("/search/{title}")
-    public void getShortMovies(@PathVariable("title") String title) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public void searchAndSaveMovies(@PathVariable("title") String title) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         JobParametersBuilder parametersBuilder = new JobParametersBuilder();
         parametersBuilder.addString("title", title);
         parametersBuilder.addLong("time", System.currentTimeMillis());
@@ -40,8 +43,9 @@ public class MovieOmdbDtoController {
     }
 
     @GetMapping("/search/imdb-id/{id}")
-    public Movie getMovieByImdbId(@PathVariable("id") String id) {
-        Movie response = omdbClient.searchByImdbId(id);
+    public MovieDto searchAndSaveMovieByImdbId(@PathVariable("id") String id) {
+        OmdbMovie omdbMovie = omdbClient.searchByImdbId(id);
+        MovieDto response = modelMapper.map(omdbMovie, MovieDto.class);
         return movieService.save(response);
     }
 }

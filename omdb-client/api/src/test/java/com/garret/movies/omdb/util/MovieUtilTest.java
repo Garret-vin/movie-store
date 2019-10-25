@@ -1,4 +1,5 @@
-package com.garret.movies.dao.util;
+/*
+package com.garret.movies.omdb.util;
 
 import com.garret.movies.dao.entity.Actor;
 import com.garret.movies.dao.entity.Country;
@@ -12,11 +13,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 public class MovieUtilTest {
 
     @Test
     public void testActorsToList() {
-        String actors = "Nikole Kidman, Arnold Schwarzenegger";
+        String actors = "Nikole Kidman, Arnold Schwarzenegger";todo
 
         Actor arni = new Actor();
         arni.setFullName("Arnold Schwarzenegger");
@@ -141,4 +143,4 @@ public class MovieUtilTest {
         List<Country> result = MovieUtil.countiesToList("");
         assertThat(result).isEmpty();
     }
-}
+}*/
