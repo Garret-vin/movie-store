@@ -1,10 +1,9 @@
-/*
-package com.garret.movies.omdb.util;
+package com.garret.movies.util;
 
-import com.garret.movies.dao.entity.Actor;
-import com.garret.movies.dao.entity.Country;
-import com.garret.movies.dao.entity.Genre;
-import com.garret.movies.dao.entity.Language;
+import com.garret.movies.service.dto.ActorDto;
+import com.garret.movies.service.dto.CountryDto;
+import com.garret.movies.service.dto.GenreDto;
+import com.garret.movies.service.dto.LanguageDto;
 import org.junit.Test;
 
 import java.sql.Date;
@@ -18,14 +17,14 @@ public class MovieUtilTest {
 
     @Test
     public void testActorsToList() {
-        String actors = "Nikole Kidman, Arnold Schwarzenegger";todo
+        String actors = "Nikole Kidman, Arnold Schwarzenegger";
 
-        Actor arni = new Actor();
+        ActorDto arni = new ActorDto();
         arni.setFullName("Arnold Schwarzenegger");
-        Actor niki = new Actor();
+        ActorDto niki = new ActorDto();
         niki.setFullName("Nikole Kidman");
-        List<Actor> expected = Arrays.asList(arni, niki);
-        List<Actor> result = MovieUtil.actorsToList(actors);
+        List<ActorDto> expected = Arrays.asList(arni, niki);
+        List<ActorDto> result = MovieUtil.actorsToList(actors);
 
         assertThat(result)
                 .isNotEmpty()
@@ -35,19 +34,19 @@ public class MovieUtilTest {
 
     @Test
     public void testActorsToListWhenEmptyStringInput() {
-        List<Actor> result = MovieUtil.actorsToList("");
+        List<ActorDto> result = MovieUtil.actorsToList("");
         assertThat(result).isEmpty();
     }
 
     @Test
     public void testGenresToList() {
         String genres = "Comedy, Action";
-        Genre comedy = new Genre();
+        GenreDto comedy = new GenreDto();
         comedy.setValue("Comedy");
-        Genre action = new Genre();
+        GenreDto action = new GenreDto();
         action.setValue("Action");
-        List<Genre> expected = Arrays.asList(comedy, action);
-        List<Genre> result = MovieUtil.genresToList(genres);
+        List<GenreDto> expected = Arrays.asList(comedy, action);
+        List<GenreDto> result = MovieUtil.genresToList(genres);
 
         assertThat(result)
                 .isNotEmpty()
@@ -57,21 +56,21 @@ public class MovieUtilTest {
 
     @Test
     public void testGenresToListWhenEmptyStringInput() {
-        List<Genre> result = MovieUtil.genresToList("");
+        List<GenreDto> result = MovieUtil.genresToList("");
         assertThat(result).isEmpty();
     }
 
     @Test
     public void testLanguagesToList() {
         String input = "English, Urdu, Spanish";
-        Language english = new Language();
+        LanguageDto english = new LanguageDto();
         english.setValue("English");
-        Language urdu = new Language();
+        LanguageDto urdu = new LanguageDto();
         urdu.setValue("Urdu");
-        Language spanish = new Language();
+        LanguageDto spanish = new LanguageDto();
         spanish.setValue("Spanish");
-        List<Language> expected = Arrays.asList(english, urdu, spanish);
-        List<Language> result = MovieUtil.languagesToList(input);
+        List<LanguageDto> expected = Arrays.asList(english, urdu, spanish);
+        List<LanguageDto> result = MovieUtil.languagesToList(input);
 
         assertThat(result)
                 .isNotEmpty()
@@ -81,7 +80,7 @@ public class MovieUtilTest {
 
     @Test
     public void testLanguagesToListWhenEmptyCollectionInput() {
-        List<Language> result = MovieUtil.languagesToList("");
+        List<LanguageDto> result = MovieUtil.languagesToList("");
         assertThat(result).isEmpty();
     }
 
@@ -113,7 +112,7 @@ public class MovieUtilTest {
 
     @Test
     public void testParseDateWhenInvalidInputParameters() {
-        String params = "asdfasdsdfddw3455ty";
+        String params = "N/A";
 
         Date expected = Date.valueOf("1111-11-11");
         Date result = MovieUtil.parseDate(params);
@@ -124,13 +123,13 @@ public class MovieUtilTest {
     @Test
     public void testCountiesToList() {
         String input = "USA, India";
-        Country usa = new Country();
+        CountryDto usa = new CountryDto();
         usa.setName("USA");
-        Country india = new Country();
+        CountryDto india = new CountryDto();
         india.setName("India");
 
-        List<Country> expected = Arrays.asList(usa, india);
-        List<Country> result = MovieUtil.countiesToList(input);
+        List<CountryDto> expected = Arrays.asList(usa, india);
+        List<CountryDto> result = MovieUtil.countiesToList(input);
 
         assertThat(result)
                 .isNotEmpty()
@@ -140,7 +139,7 @@ public class MovieUtilTest {
 
     @Test
     public void testCountriesToListWhenEmptyCollectionInput() {
-        List<Country> result = MovieUtil.countiesToList("");
+        List<CountryDto> result = MovieUtil.countiesToList("");
         assertThat(result).isEmpty();
     }
-}*/
+}

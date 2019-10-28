@@ -1,8 +1,11 @@
 package com.garret.movies.batch;
 
-import com.garret.movies.omdb.dto.ShortMovie;
+import com.garret.movies.omdb.entity.ShortMovie;
 import com.garret.movies.omdb.api.OmdbClient;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,13 +17,18 @@ import static org.mockito.Mockito.*;
 
 public class ShortMovieReaderTest {
 
-    private OmdbClient omdbClient = mock(OmdbClient.class);
+    @Mock
+    private OmdbClient omdbClient;
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void read() throws Exception {
         ShortMovie testMovie = new ShortMovie();
-        List<ShortMovie> inputList = new ArrayList<>();
-        inputList.add(testMovie);
+        List<ShortMovie> inputList = Collections.singletonList(testMovie);
         when(omdbClient.searchMovies(any())).thenReturn(inputList);
         ShortMovieReader shortMovieReader = new ShortMovieReader(omdbClient);
         shortMovieReader.init();

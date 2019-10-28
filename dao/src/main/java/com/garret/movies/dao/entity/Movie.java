@@ -3,7 +3,7 @@ package com.garret.movies.dao.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Data

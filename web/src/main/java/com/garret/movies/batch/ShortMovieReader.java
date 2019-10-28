@@ -1,7 +1,7 @@
 package com.garret.movies.batch;
 
 import com.garret.movies.omdb.api.OmdbClient;
-import com.garret.movies.omdb.dto.ShortMovie;
+import com.garret.movies.omdb.entity.ShortMovie;
 import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
@@ -29,7 +29,7 @@ public class ShortMovieReader implements ItemReader<ShortMovie> {
     }
 
     @BeforeStep
-    public void init() {
+    void init() {
         this.movieData.addAll(omdbClient.searchMovies(title));
     }
 

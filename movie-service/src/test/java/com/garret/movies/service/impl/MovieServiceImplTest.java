@@ -2,25 +2,37 @@ package com.garret.movies.service.impl;
 
 import com.garret.movies.dao.entity.*;
 import com.garret.movies.dao.repository.MovieRepository;
-import com.garret.movies.service.dto.MovieDto;
-import org.junit.BeforeClass;
+import com.garret.movies.service.dto.*;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class MovieServiceImplTest {
 
-    private ModelMapper modelMapper = new ModelMapper();
-    private MovieRepository movieRepository = mock(MovieRepository.class);
-    private MovieServiceImpl movieService = new MovieServiceImpl(movieRepository, modelMapper);
+    @Mock
+    private MovieRepository movieRepository;
+    @Mock
+    private ModelMapper modelMapper;
+    @InjectMocks
+    private MovieServiceImpl movieService;
     private static Movie movie;
+    private static MovieDto movieDto;
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
         movie = new Movie();
         movie.setId(2L);
         movie.setImdbId("tt223344");
@@ -36,124 +48,139 @@ public class MovieServiceImplTest {
         Language language = new Language();
         language.setValue("English");
         movie.setLanguages(Collections.singletonList(language));
+
+        movieDto = new MovieDto();
+        movieDto.setImdbId("tt223344");
+        CountryDto countryDto = new CountryDto();
+        country.setName("USA");
+        movieDto.setCountries(Collections.singletonList(countryDto));
+        GenreDto genreDto = new GenreDto();
+        genre.setValue("Action");
+        movieDto.setGenres(Collections.singletonList(genreDto));
+        ActorDto actorDto = new ActorDto();
+        actor.setFullName("Nikole Kidman");
+        movieDto.setActors(Collections.singletonList(actorDto));
+        LanguageDto languageDto = new LanguageDto();
+        language.setValue("English");
+        movieDto.setLanguages(Collections.singletonList(languageDto));
     }
 
     @Test
-    public void convertToDto() {
-        MovieDto movieDto = movieService.convertToDto(movie);
-        assertThat(movieDto).isNotNull();
-    }
-    /*@Test
     public void save() {
+        when(movieRepository.findByImdbId(anyString())).thenReturn(Optional.empty());
         when(movieRepository.save(any(Movie.class))).thenReturn(movie);
-        when(movieRepository.findByImdbId(anyString())).thenReturn(Optional.empty());TODO
-
-        Movie result = movieService.save(new Movie());
+        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
+        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
+        MovieDto result = movieService.save(movieDto);
         assertThat(result)
                 .isNotNull()
-                .isEqualToComparingFieldByField(movie);
-        assertThat(result.getId()).isEqualTo(2L);
+                .isEqualToComparingOnlyGivenFields(movie);
+        assertThat(result.getImdbId()).isEqualTo("tt223344");
         verify(movieRepository).save(any(Movie.class));
         verify(movieRepository).findByImdbId(any());
+        verify(modelMapper).map(movieDto, Movie.class);
+        verify(modelMapper).map(movie, MovieDto.class);
     }
 
     @Test
     public void saveExistedMovie() {
         when(movieRepository.findByImdbId(anyString())).thenReturn(Optional.of(movie));
-        Movie result = movieService.save(movie);
+        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
+        MovieDto result = movieService.save(movieDto);
 
         assertThat(result)
                 .isNotNull()
-                .isEqualToComparingFieldByField(movie);
-        assertThat(result.getId()).isEqualTo(2L);
+                .isEqualToComparingOnlyGivenFields(movie);
+        assertThat(result.getImdbId()).isEqualTo("tt223344");
         verify(movieRepository, never()).save(any());
         verify(movieRepository).findByImdbId(movie.getImdbId());
+        verify(modelMapper).map(movie, MovieDto.class);
+        verify(modelMapper, never()).map(movieDto, Movie.class);
     }
 
     @Test
     public void saveAll() {
         when(movieRepository.saveAll(anyIterable())).thenReturn(Collections.singletonList(movie));
-        List<Movie> resultList = movieService.saveAll(Collections.singletonList(movie));
+        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
+        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
+        List<MovieDto> resultList = movieService.saveAll(Collections.singletonList(movieDto));
 
         assertThat(resultList)
                 .isNotNull()
                 .isNotEmpty()
-                .containsOnly(movie);
+                .containsOnly(movieDto);
         verify(movieRepository).saveAll(anyIterable());
+        verify(modelMapper).map(movieDto, Movie.class);
+        verify(modelMapper).map(movie, MovieDto.class);
     }
 
     @Test
     public void getById() {
         when(movieRepository.findById(2L)).thenReturn(Optional.of(movie));
-        Optional<Movie> result = movieService.getById(2L);
+        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
+        Optional<MovieDto> result = movieService.getById(2L);
 
         assertThat(result)
                 .isNotEmpty()
-                .contains(movie);
+                .contains(movieDto);
         verify(movieRepository).findById(2L);
+        verify(modelMapper).map(movie, MovieDto.class);
     }
 
     @Test
     public void getByIdWhenEmptyResultReturn() {
         when(movieRepository.findById(anyLong())).thenReturn(Optional.empty());
-        Optional<Movie> result = movieService.getById(345L);
+        Optional<MovieDto> result = movieService.getById(345L);
 
         assertThat(result)
                 .isNotNull()
                 .isEmpty();
         verify(movieRepository).findById(345L);
+        verify(modelMapper, never()).map(movie, MovieDto.class);
     }
 
     @Test
     public void getAll() {
-        when(movieRepository.findAll()).thenReturn(Collections.singletonList(movie));
-        List<Movie> result = movieService.getAll();
+        Iterable<Movie> movieList = Collections.singletonList(movie);
+        when(movieRepository.findAll()).thenReturn(movieList);
+        List<Movie> movies = Collections.singletonList(movie);
+        Type listType = new TypeToken<List<MovieDto>>() {
+        }.getType();
+        List<MovieDto> dtoList = Collections.singletonList(movieDto);
+        when(modelMapper.map(movies, listType)).thenReturn(dtoList);
+
+        List<MovieDto> result = movieService.getAll();
 
         assertThat(result)
                 .isNotNull()
                 .isNotEmpty()
-                .containsOnly(movie);
+                .containsOnly(movieDto);
         verify(movieRepository).findAll();
+        verify(modelMapper).map(movies, listType);
     }
 
     @Test
     public void getByImdbId() {
         when(movieRepository.findByImdbId(movie.getImdbId())).thenReturn(Optional.of(movie));
-        Optional<Movie> result = movieService.getByImdbId(movie.getImdbId());
+        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
+        Optional<MovieDto> result = movieService.getByImdbId(movie.getImdbId());
 
         assertThat(result)
                 .isNotEmpty()
-                .contains(movie);
+                .contains(movieDto);
         verify(movieRepository).findByImdbId(movie.getImdbId());
+        verify(modelMapper).map(movie, MovieDto.class);
     }
 
     @Test
     public void getByImdbIdWhenEmptyResultReturn() {
-        when(movieRepository.findByImdbId(anyString())).thenReturn(Optional.empty());
-        Optional<Movie> result = movieService.getByImdbId("tf234566");
+        when(movieRepository.findByImdbId("tf234566")).thenReturn(Optional.empty());
+        Optional<MovieDto> result = movieService.getByImdbId("tf234566");
 
         assertThat(result)
                 .isNotNull()
                 .isEmpty();
         verify(movieRepository).findByImdbId("tf234566");
-    }*/
-
-    @Test
-    public void deleteById() {
-        when(movieRepository.removeById(2L)).thenReturn(1);
-        boolean result = movieService.deleteById(movie.getId());
-
-        assertThat(result).isTrue();
-        verify(movieRepository).removeById(movie.getId());
-    }
-
-    @Test
-    public void deleteByIdFailTest() {
-        when(movieRepository.removeById(anyLong())).thenReturn(0);
-        boolean result = movieService.deleteById(movie.getId());
-
-        assertThat(result).isFalse();
-        verify(movieRepository).removeById(anyLong());
     }
 
     @Test

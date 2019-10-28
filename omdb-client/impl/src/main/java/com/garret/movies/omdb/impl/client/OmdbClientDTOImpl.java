@@ -1,9 +1,9 @@
 package com.garret.movies.omdb.impl.client;
 
 import com.garret.movies.omdb.api.OmdbClient;
-import com.garret.movies.omdb.dto.MoviesResponse;
-import com.garret.movies.omdb.dto.OmdbMovie;
-import com.garret.movies.omdb.dto.ShortMovie;
+import com.garret.movies.omdb.entity.MoviesResponse;
+import com.garret.movies.omdb.entity.OmdbMovie;
+import com.garret.movies.omdb.entity.ShortMovie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,7 @@
-package com.garret.movies.omdb.dto;
+package com.garret.movies.omdb.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.garret.movies.omdb.deserializer.ActorListDeserializer;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class OmdbMovie {
@@ -31,8 +27,7 @@ public class OmdbMovie {
     @JsonProperty("Genre")
     private String genres;
     @JsonProperty("Actors")
-    @JsonDeserialize(using = ActorListDeserializer.class)
-    private List<OmdbActor> actors;
+    private String actors;
     @JsonProperty("Language")
     private String languages;
     @JsonProperty("Country")

@@ -1,4 +1,4 @@
-package com.garret.movies.omdb.dto;
+package com.garret.movies.omdb.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

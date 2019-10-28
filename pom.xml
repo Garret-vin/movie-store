@@ -33,21 +33,12 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--Collections util-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>4.0</version>
             </dependency>
 
-            <!--OMDB api-->
-            <dependency>
-                <groupId>com.omertron</groupId>
-                <artifactId>API-OMDB</artifactId>
-                <version>1.5</version>
-            </dependency>
-
-            <!--Swagger-->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
@@ -59,7 +50,6 @@
                 <version>2.9.2</version>
             </dependency>
 
-            <!--Entity <-> DTO mapper-->
             <dependency>
                 <groupId>org.modelmapper</groupId>
                 <artifactId>modelmapper</artifactId>
@@ -69,7 +59,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!--Jacoco-->
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
@@ -79,7 +68,6 @@
 
     <build>
         <plugins>
-            <!-- JaCoCo plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -87,9 +75,6 @@
                 <configuration>
                     <excludes>
                         <exclude>**/com/garret/movies/MovieApplication.class</exclude>
-                        <exclude>**/com/garret/movies/dao/entity/**/*</exclude>
-                        <exclude>**/com/garret/movies/dao/jooq/**/*</exclude>
-                        <exclude>**/com/garret/movies/dao/repository/**/*</exclude>
                         <exclude>**/*exception/**/*</exclude>
                         <exclude>**/*config/**/*</exclude>
                     </excludes>

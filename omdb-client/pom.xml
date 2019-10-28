@@ -22,20 +22,10 @@
             <artifactId>dao</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <!--Collections util-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
-
-        <!--OMDB api-->
-        <dependency>
-            <groupId>com.omertron</groupId>
-            <artifactId>API-OMDB</artifactId>
-        </dependency>
-
-        <!--Lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

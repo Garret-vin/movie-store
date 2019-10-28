@@ -4,6 +4,7 @@ import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
 import com.garret.movies.service.dto.MovieDto;
+import com.google.inject.internal.util.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private MovieRepository movieRepository;
     private ModelMapper modelMapper;
 
@@ -56,17 +55,16 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public Optional<MovieDto> getById(@NonNull Long id) {
-        Optional<Movie> movieFromDb = movieRepository.findById(id);
-        MovieDto movieDTO = modelMapper.map(movieFromDb, MovieDto.class);//TODO java 8 style
-        return Optional.of(movieDTO);
+        return movieRepository.findById(id).map(this::convertToDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<MovieDto> getAll() {
-        List<Movie> result = new ArrayList<>();
-        movieRepository.findAll().forEach(result::add);
-        Type listType = new TypeToken<List<MovieDto>>() {}.getType();
+        Iterable<Movie> iterable = movieRepository.findAll();
+        List<Movie> result = ImmutableList.copyOf(iterable);
+        Type listType = new TypeToken<List<MovieDto>>() {
+        }.getType();
         return modelMapper.map(result, listType);
     }
 
@@ -79,10 +77,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional
-    public boolean deleteById(@NonNull Long id) {
-        boolean result = movieRepository.removeById(id) > 0;
-        log.info("Delete movie with id = " + id + ": " + result);
-        return result;
+    public void deleteById(@NonNull Long id) {
+        movieRepository.deleteById(id);
+        log.info("Deleting movie with id = " + id);
     }
 
     @Override
@@ -97,11 +94,11 @@ public class MovieServiceImpl implements MovieService {
         movieRepository.deleteAll();
     }
 
-    public MovieDto convertToDto(Movie movie) {
+    private MovieDto convertToDto(Movie movie) {
         return modelMapper.map(movie, MovieDto.class);
     }
 
-    public Movie convertToEntity(MovieDto movieDTO) {
+    private Movie convertToEntity(MovieDto movieDTO) {
         return modelMapper.map(movieDTO, Movie.class);
     }
 }

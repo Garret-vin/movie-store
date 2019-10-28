@@ -1,8 +1,8 @@
 package com.garret.movies.batch;
 
 import com.garret.movies.omdb.api.OmdbClient;
-import com.garret.movies.omdb.dto.OmdbMovie;
-import com.garret.movies.omdb.dto.ShortMovie;
+import com.garret.movies.omdb.entity.OmdbMovie;
+import com.garret.movies.omdb.entity.ShortMovie;
 import com.garret.movies.service.api.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;

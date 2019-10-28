@@ -17,7 +17,7 @@ public interface MovieService {
 
     Optional<MovieDto> getByImdbId(String imdbId);
 
-    boolean deleteById(Long id);
+    void deleteById(Long id);
 
     boolean existsByImdbId(String imdbId);
 

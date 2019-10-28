@@ -1,11 +1,6 @@
 package com.garret.movies.controller;
 
-import com.garret.movies.omdb.dto.OmdbMovie;
-import com.garret.movies.omdb.impl.client.OmdbClientDTOImpl;
-import com.garret.movies.service.api.MovieService;
-import com.garret.movies.service.dto.MovieDto;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -21,13 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v2")
+@RequestMapping("/api/v1")
 @AllArgsConstructor
 public class MovieOmdbDtoController {
 
-    private ModelMapper modelMapper;
-    private OmdbClientDTOImpl omdbClient;
-    private MovieService movieService;
     private JobLauncher jobLauncher;
     private Job job;
 
@@ -40,12 +32,5 @@ public class MovieOmdbDtoController {
         JobParameters jobParameters = parametersBuilder.toJobParameters();
 
         jobLauncher.run(job, jobParameters);
-    }
-
-    @GetMapping("/search/imdb-id/{id}")
-    public MovieDto searchAndSaveMovieByImdbId(@PathVariable("id") String id) {
-        OmdbMovie omdbMovie = omdbClient.searchByImdbId(id);
-        MovieDto response = modelMapper.map(omdbMovie, MovieDto.class);
-        return movieService.save(response);
     }
 }
