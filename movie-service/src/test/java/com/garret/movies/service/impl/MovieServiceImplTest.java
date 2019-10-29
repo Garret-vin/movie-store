@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -100,9 +101,15 @@ public class MovieServiceImplTest {
 
     @Test
     public void saveAll() {
-        when(movieRepository.saveAll(anyIterable())).thenReturn(Collections.singletonList(movie));
-        when(modelMapper.map(movieDto, Movie.class)).thenReturn(movie);
-        when(modelMapper.map(movie, MovieDto.class)).thenReturn(movieDto);
+        Type movieListType = new TypeToken<List<Movie>>() {
+        }.getType();
+        Type movieDtoListType = new TypeToken<List<MovieDto>>() {
+        }.getType();
+        List<Movie> movieList = Collections.singletonList(movie);
+        List<MovieDto> dtoList = Collections.singletonList(movieDto);
+        when(movieRepository.saveAll(anyIterable())).thenReturn(movieList);
+        when(modelMapper.map(dtoList, movieListType)).thenReturn(movieList);
+        when(modelMapper.map(movieList, movieDtoListType)).thenReturn(dtoList);
         List<MovieDto> resultList = movieService.saveAll(Collections.singletonList(movieDto));
 
         assertThat(resultList)
@@ -110,8 +117,8 @@ public class MovieServiceImplTest {
                 .isNotEmpty()
                 .containsOnly(movieDto);
         verify(movieRepository).saveAll(anyIterable());
-        verify(modelMapper).map(movieDto, Movie.class);
-        verify(modelMapper).map(movie, MovieDto.class);
+        verify(modelMapper).map(dtoList, movieListType);
+        verify(modelMapper).map(movieList, movieDtoListType);
     }
 
     @Test
@@ -141,13 +148,12 @@ public class MovieServiceImplTest {
 
     @Test
     public void getAll() {
-        Iterable<Movie> movieList = Collections.singletonList(movie);
+        List<Movie> movieList = Collections.singletonList(movie);
         when(movieRepository.findAll()).thenReturn(movieList);
-        List<Movie> movies = Collections.singletonList(movie);
         Type listType = new TypeToken<List<MovieDto>>() {
         }.getType();
         List<MovieDto> dtoList = Collections.singletonList(movieDto);
-        when(modelMapper.map(movies, listType)).thenReturn(dtoList);
+        when(modelMapper.map(movieList, listType)).thenReturn(dtoList);
 
         List<MovieDto> result = movieService.getAll();
 
@@ -156,7 +162,7 @@ public class MovieServiceImplTest {
                 .isNotEmpty()
                 .containsOnly(movieDto);
         verify(movieRepository).findAll();
-        verify(modelMapper).map(movies, listType);
+        verify(modelMapper).map(movieList, listType);
     }
 
     @Test

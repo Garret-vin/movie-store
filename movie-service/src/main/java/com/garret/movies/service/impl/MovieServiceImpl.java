@@ -4,7 +4,6 @@ import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
 import com.garret.movies.service.dto.MovieDto;
-import com.google.inject.internal.util.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +13,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
+    private static final Type MOVIE_LIST_TYPE = new TypeToken<List<Movie>>() {
+    }.getType();
+    private static final Type MOVIE_DTO_LIST_TYPE = new TypeToken<List<MovieDto>>() {
+    }.getType();
     private MovieRepository movieRepository;
     private ModelMapper modelMapper;
 
@@ -32,7 +33,7 @@ public class MovieServiceImpl implements MovieService {
     public MovieDto save(@NonNull MovieDto movieDto) {
         return movieRepository.findByImdbId(movieDto.getImdbId()).map(this::convertToDto).orElseGet(() -> {
             log.info("Saving movie " + movieDto.getTitle());
-            Movie movie = convertToEntity(movieDto);
+            Movie movie = modelMapper.map(movieDto, Movie.class);
             Movie savedMovie = movieRepository.save(movie);
             return convertToDto(savedMovie);
         });
@@ -41,15 +42,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public List<MovieDto> saveAll(@NonNull List<MovieDto> movieDtoList) {
-        List<Movie> movieList = movieDtoList.stream()
-                .map(this::convertToEntity)
-                .collect(Collectors.toList());
+        List<Movie> movieList = modelMapper.map(movieDtoList, MOVIE_LIST_TYPE);
         log.info("Saving " + movieList.size() + " movies to database");
-        List<Movie> savedMovies = new ArrayList<>();
-        movieRepository.saveAll(movieList).forEach(savedMovies::add);
-        return savedMovies.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        List<Movie> savedMovies = movieRepository.saveAll(movieList);
+        return modelMapper.map(savedMovies, MOVIE_DTO_LIST_TYPE);
     }
 
     @Override
@@ -61,11 +57,8 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional(readOnly = true)
     public List<MovieDto> getAll() {
-        Iterable<Movie> iterable = movieRepository.findAll();
-        List<Movie> result = ImmutableList.copyOf(iterable);
-        Type listType = new TypeToken<List<MovieDto>>() {
-        }.getType();
-        return modelMapper.map(result, listType);
+        List<Movie> result = movieRepository.findAll();
+        return modelMapper.map(result, MOVIE_DTO_LIST_TYPE);
     }
 
     @Override
@@ -73,7 +66,6 @@ public class MovieServiceImpl implements MovieService {
     public Optional<MovieDto> getByImdbId(@NonNull String imdbId) {
         return movieRepository.findByImdbId(imdbId).map(this::convertToDto);
     }
-
 
     @Override
     @Transactional
@@ -96,9 +88,5 @@ public class MovieServiceImpl implements MovieService {
 
     private MovieDto convertToDto(Movie movie) {
         return modelMapper.map(movie, MovieDto.class);
-    }
-
-    private Movie convertToEntity(MovieDto movieDTO) {
-        return modelMapper.map(movieDTO, Movie.class);
     }
 }
