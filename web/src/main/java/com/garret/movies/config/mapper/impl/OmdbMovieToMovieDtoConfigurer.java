@@ -21,13 +21,20 @@ public class OmdbMovieToMovieDtoConfigurer implements ModelMapperConfigurer {
 
     @Override
     public void configure() {
-        Converter<String, List<ActorDto>> toActorDtoConverter = context -> MovieUtil.actorsToList(context.getSource());
-        Converter<String, List<GenreDto>> toGenresDtoConverter = context -> MovieUtil.genresToList(context.getSource());
-        Converter<String, List<LanguageDto>> toLanguageDtoConverter = context -> MovieUtil.languagesToList(context.getSource());
-        Converter<String, List<CountryDto>> toCountriesDtoConverter = context -> MovieUtil.countiesToList(context.getSource());
-        Converter<String, Integer> toImdbVotesConverter = context -> MovieUtil.convertStringToInteger(context.getSource());
-        Converter<String, Double> toImdbRatingDtoConverter = context -> MovieUtil.convertStringToDouble(context.getSource());
-        Converter<String, Date> dateConverter = context -> MovieUtil.parseDate(context.getSource());
+        Converter<String, List<ActorDto>> toActorDtoConverter = context ->
+                MovieUtil.stringToValuableList(context.getSource(), ActorDto.class);
+        Converter<String, List<GenreDto>> toGenresDtoConverter = context ->
+                MovieUtil.stringToValuableList(context.getSource(), GenreDto.class);
+        Converter<String, List<LanguageDto>> toLanguageDtoConverter = context ->
+                MovieUtil.stringToValuableList(context.getSource(), LanguageDto.class);
+        Converter<String, List<CountryDto>> toCountriesDtoConverter = context ->
+                MovieUtil.stringToValuableList(context.getSource(), CountryDto.class);
+        Converter<String, Integer> toImdbVotesConverter = context ->
+                MovieUtil.convertStringToInteger(context.getSource());
+        Converter<String, Double> toImdbRatingDtoConverter = context ->
+                MovieUtil.convertStringToDouble(context.getSource());
+        Converter<String, Date> dateConverter = context ->
+                MovieUtil.parseDate(context.getSource());
 
         modelMapper.addConverter(toActorDtoConverter);
         modelMapper.addConverter(toGenresDtoConverter);

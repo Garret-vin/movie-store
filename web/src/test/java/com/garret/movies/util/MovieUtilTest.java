@@ -1,88 +1,16 @@
 package com.garret.movies.util;
 
 import com.garret.movies.service.dto.ActorDto;
-import com.garret.movies.service.dto.CountryDto;
-import com.garret.movies.service.dto.GenreDto;
-import com.garret.movies.service.dto.LanguageDto;
+import com.garret.movies.service.dto.marker.Valuable;
 import org.junit.Test;
 
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class MovieUtilTest {
-
-    @Test
-    public void testActorsToList() {
-        String actors = "Nikole Kidman, Arnold Schwarzenegger";
-
-        ActorDto arni = new ActorDto();
-        arni.setFullName("Arnold Schwarzenegger");
-        ActorDto niki = new ActorDto();
-        niki.setFullName("Nikole Kidman");
-        List<ActorDto> expected = Arrays.asList(arni, niki);
-        List<ActorDto> result = MovieUtil.actorsToList(actors);
-
-        assertThat(result)
-                .isNotEmpty()
-                .containsAll(expected)
-                .hasSameSizeAs(expected);
-    }
-
-    @Test
-    public void testActorsToListWhenEmptyStringInput() {
-        List<ActorDto> result = MovieUtil.actorsToList("");
-        assertThat(result).isEmpty();
-    }
-
-    @Test
-    public void testGenresToList() {
-        String genres = "Comedy, Action";
-        GenreDto comedy = new GenreDto();
-        comedy.setValue("Comedy");
-        GenreDto action = new GenreDto();
-        action.setValue("Action");
-        List<GenreDto> expected = Arrays.asList(comedy, action);
-        List<GenreDto> result = MovieUtil.genresToList(genres);
-
-        assertThat(result)
-                .isNotEmpty()
-                .containsAll(expected)
-                .hasSameSizeAs(expected);
-    }
-
-    @Test
-    public void testGenresToListWhenEmptyStringInput() {
-        List<GenreDto> result = MovieUtil.genresToList("");
-        assertThat(result).isEmpty();
-    }
-
-    @Test
-    public void testLanguagesToList() {
-        String input = "English, Urdu, Spanish";
-        LanguageDto english = new LanguageDto();
-        english.setValue("English");
-        LanguageDto urdu = new LanguageDto();
-        urdu.setValue("Urdu");
-        LanguageDto spanish = new LanguageDto();
-        spanish.setValue("Spanish");
-        List<LanguageDto> expected = Arrays.asList(english, urdu, spanish);
-        List<LanguageDto> result = MovieUtil.languagesToList(input);
-
-        assertThat(result)
-                .isNotEmpty()
-                .containsAll(expected)
-                .hasSameSizeAs(expected);
-    }
-
-    @Test
-    public void testLanguagesToListWhenEmptyCollectionInput() {
-        List<LanguageDto> result = MovieUtil.languagesToList("");
-        assertThat(result).isEmpty();
-    }
 
     @Test
     public void testConvertVotesToInt() {
@@ -121,25 +49,23 @@ public class MovieUtilTest {
     }
 
     @Test
-    public void testCountiesToList() {
-        String input = "USA, India";
-        CountryDto usa = new CountryDto();
-        usa.setName("USA");
-        CountryDto india = new CountryDto();
-        india.setName("India");
-
-        List<CountryDto> expected = Arrays.asList(usa, india);
-        List<CountryDto> result = MovieUtil.countiesToList(input);
-
-        assertThat(result)
+    public void stringToValuableList() {
+        String input = "Arnold";
+        ActorDto actorDto = new ActorDto();
+        actorDto.setFullName(input);
+        List<ActorDto> resultList = MovieUtil.stringToValuableList(input, ActorDto.class);
+        assertThat(resultList)
+                .isNotNull()
                 .isNotEmpty()
-                .containsAll(expected)
-                .hasSameSizeAs(expected);
+                .contains(actorDto);
+        assertThat(resultList.get(0)).isInstanceOf(Valuable.class);
     }
 
     @Test
-    public void testCountriesToListWhenEmptyCollectionInput() {
-        List<CountryDto> result = MovieUtil.countiesToList("");
-        assertThat(result).isEmpty();
+    public void stringToValuableListWhenInvalidStringInput() {
+        List<ActorDto> result = MovieUtil.stringToValuableList("", ActorDto.class);
+        assertThat(result)
+                .isNotNull()
+                .isEmpty();
     }
 }
