@@ -1,14 +1,11 @@
 package com.garret.movies.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.garret.movies.service.dto.marker.Valuable;
 import lombok.Data;
 
 @Data
 public class ActorDto implements Valuable {
-    private String fullName;
-
-    @Override
-    public void setValue(String value) {
-        setFullName(value);
-    }
+    @JsonProperty("name")
+    private String value;
 }

@@ -52,7 +52,7 @@ public class MovieUtilTest {
     public void stringToValuableList() {
         String input = "Arnold";
         ActorDto actorDto = new ActorDto();
-        actorDto.setFullName(input);
+        actorDto.setValue(input);
         List<ActorDto> resultList = MovieUtil.stringToValuableList(input, ActorDto.class);
         assertThat(resultList)
                 .isNotNull()
