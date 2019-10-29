@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -205,5 +204,22 @@ public class MovieServiceImplTest {
 
         assertThat(result).isFalse();
         verify(movieRepository).existsByImdbId(movie.getImdbId());
+    }
+
+    @Test
+    public void deleteById() {
+        Long id = 2L;
+        doNothing().when(movieRepository).deleteById(id);
+        movieService.deleteById(id);
+
+        verify(movieRepository).deleteById(id);
+    }
+
+    @Test
+    public void deleteAll() {
+        doNothing().when(movieRepository).deleteAll();
+        movieService.deleteAll();
+
+        verify(movieRepository).deleteAll();
     }
 }
