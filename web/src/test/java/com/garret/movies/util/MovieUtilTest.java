@@ -1,5 +1,6 @@
 package com.garret.movies.util;
 
+import com.garret.movies.exception.IncorrectDateException;
 import com.garret.movies.service.dto.ActorDto;
 import com.garret.movies.service.dto.marker.Valuable;
 import org.junit.Test;
@@ -39,13 +40,35 @@ public class MovieUtilTest {
     }
 
     @Test
-    public void testParseDateWhenInvalidInputParameters() {
+    public void testParseDateWhenNotAssignedParameter() {
         String params = "N/A";
 
         Date expected = Date.valueOf("1111-11-11");
         Date result = MovieUtil.parseDate(params);
 
         assertThat(result).isInSameDayAs(expected);
+    }
+
+    @Test(expected = IncorrectDateException.class)
+    public void testParseDateWhenInvalidParameter() {
+        String params = "2";
+        MovieUtil.parseDate(params);
+    }
+
+    @Test
+    public void convertStringToDouble() {
+        String input = "2.0";
+        Double expected = 2.0;
+        Double result = MovieUtil.convertStringToDouble(input);
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    public void convertStringToDoubleNotAssignedParam() {
+        String input = "N/A";
+        Double result = MovieUtil.convertStringToDouble(input);
+        assertThat(result).isEqualTo(0);
     }
 
     @Test
