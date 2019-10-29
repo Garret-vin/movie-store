@@ -8,9 +8,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -24,7 +21,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableBatchProcessing
 public class SpringBatchConfig {
 
-    private JobRepository jobRepository;
+    private StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public TaskExecutor threadPoolTaskExecutor() {
@@ -37,29 +34,22 @@ public class SpringBatchConfig {
     }
 
     @Bean
-    public JobLauncher asyncJobLauncher() throws Exception {
-        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(jobRepository);
-        jobLauncher.setTaskExecutor(threadPoolTaskExecutor());
-        return jobLauncher;
+    public Job job(JobBuilderFactory jobBuilderFactory, Step step) {
+        return jobBuilderFactory.get("OMDB-load")
+                .start(step)
+                .build();
     }
 
     @Bean
-    public Job job(JobBuilderFactory jobBuilderFactory,
-                   StepBuilderFactory stepBuilderFactory,
-                   ItemReader<ShortMovie> itemReader,
-                   ItemProcessor<ShortMovie, OmdbMovie> itemProcessor,
-                   ItemWriter<OmdbMovie> itemWriter) {
-
-        Step step = stepBuilderFactory.get("OMBD-collection-load")
-                .<ShortMovie, OmdbMovie>chunk(100)
+    public Step step(ItemReader<ShortMovie> itemReader,
+                     ItemProcessor<ShortMovie, OmdbMovie> itemProcessor,
+                     ItemWriter<OmdbMovie> itemWriter) {
+        return stepBuilderFactory.get("OMBD-collection-load")
+                .<ShortMovie, OmdbMovie>chunk(50)
                 .reader(itemReader)
                 .processor(itemProcessor)
                 .writer(itemWriter)
-                .build();
-
-        return jobBuilderFactory.get("OMDB-load")
-                .start(step)
+                .taskExecutor(threadPoolTaskExecutor())
                 .build();
     }
 }

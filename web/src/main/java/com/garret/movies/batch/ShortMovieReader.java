@@ -18,7 +18,7 @@ import java.util.List;
 @StepScope
 public class ShortMovieReader implements ItemReader<ShortMovie> {
 
-    @Value("#{jobParameters[title]}")
+    @Value("#{jobParameters['title']}")
     private String title;
     private List<ShortMovie> movieData;
     private OmdbClient omdbClient;
