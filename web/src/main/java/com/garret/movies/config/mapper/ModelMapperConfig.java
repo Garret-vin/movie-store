@@ -1,4 +1,4 @@
-package com.garret.movies.config;
+package com.garret.movies.config.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NamingConventions;

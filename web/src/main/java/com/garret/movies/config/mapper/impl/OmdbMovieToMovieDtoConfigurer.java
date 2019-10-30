@@ -3,6 +3,7 @@ package com.garret.movies.config.mapper.impl;
 import com.garret.movies.config.mapper.ModelMapperConfigurer;
 import com.garret.movies.omdb.entity.OmdbMovie;
 import com.garret.movies.service.dto.*;
+import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.util.MovieUtil;
 import lombok.AllArgsConstructor;
 import org.modelmapper.Converter;

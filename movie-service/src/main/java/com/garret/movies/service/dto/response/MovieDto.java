@@ -1,5 +1,9 @@
-package com.garret.movies.service.dto;
+package com.garret.movies.service.dto.response;
 
+import com.garret.movies.service.dto.ActorDto;
+import com.garret.movies.service.dto.CountryDto;
+import com.garret.movies.service.dto.GenreDto;
+import com.garret.movies.service.dto.LanguageDto;
 import lombok.Data;
 
 import java.sql.Date;

@@ -1,11 +1,13 @@
 package com.garret.movies.controller;
 
 import com.garret.movies.service.api.MovieService;
-import com.garret.movies.service.dto.MovieDto;
+import com.garret.movies.service.dto.response.MovieDto;
+import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,8 +22,9 @@ public class MovieDatabaseController {
     }
 
     @GetMapping
-    public List<MovieDto> findAll() {
-        return movieService.getAll();
+    public SimpleMoviesResponse findAll(
+            @PageableDefault(sort = "imdbRating", direction = Sort.Direction.DESC) Pageable pageable) {
+        return movieService.getAll(pageable);
     }
 
     @DeleteMapping

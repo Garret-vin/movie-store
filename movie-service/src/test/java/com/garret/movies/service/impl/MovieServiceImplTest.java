@@ -3,6 +3,8 @@ package com.garret.movies.service.impl;
 import com.garret.movies.dao.entity.*;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.dto.*;
+import com.garret.movies.service.dto.response.MovieDto;
+import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -10,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -148,19 +153,28 @@ public class MovieServiceImplTest {
     @Test
     public void getAll() {
         List<Movie> movieList = Collections.singletonList(movie);
-        when(movieRepository.findAll()).thenReturn(movieList);
-        Type listType = new TypeToken<List<MovieDto>>() {
-        }.getType();
-        List<MovieDto> dtoList = Collections.singletonList(movieDto);
-        when(modelMapper.map(movieList, listType)).thenReturn(dtoList);
+        Page<Movie> fullPage = new PageImpl<>(movieList);
+        Pageable pageable = mock(Pageable.class);
+        when(movieRepository.findAll(pageable)).thenReturn(fullPage);
 
-        List<MovieDto> result = movieService.getAll();
+        Type listType = new TypeToken<List<SimpleMovieDto>>() {
+        }.getType();
+        SimpleMovieDto simpleMovie = new SimpleMovieDto();
+        simpleMovie.setId(movie.getId());
+        List<SimpleMovieDto> simpleMovieList = Collections.singletonList(simpleMovie);
+        when(modelMapper.map(fullPage.getContent(), listType)).thenReturn(simpleMovieList);
+
+        SimpleMoviesResponse expected = new SimpleMoviesResponse();
+        expected.setSearchContent(simpleMovieList);
+        expected.setPageSize(fullPage.getSize());
+        expected.setTotalElements(fullPage.getTotalElements());
+        SimpleMoviesResponse result = movieService.getAll(pageable);
 
         assertThat(result)
                 .isNotNull()
-                .isNotEmpty()
-                .containsOnly(movieDto);
-        verify(movieRepository).findAll();
+                .isEqualTo(expected);
+
+        verify(movieRepository).findAll(pageable);
         verify(modelMapper).map(movieList, listType);
     }
 

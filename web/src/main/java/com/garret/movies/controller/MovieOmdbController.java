@@ -18,19 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @AllArgsConstructor
-public class MovieOmdbDtoController {
+public class MovieOmdbController {
 
     private JobLauncher jobLauncher;
     private Job job;
 
     @Async
     @GetMapping("/search/{title}")
-    public void searchAndSaveMovies(@PathVariable("title") String title) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public void searchAndSaveMovies(@PathVariable("title") String title)
+            throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+            JobRestartException, JobInstanceAlreadyCompleteException {
+
         JobParametersBuilder parametersBuilder = new JobParametersBuilder();
         parametersBuilder.addString("title", title);
         parametersBuilder.addLong("time", System.currentTimeMillis());
         JobParameters jobParameters = parametersBuilder.toJobParameters();
-
         jobLauncher.run(job, jobParameters);
     }
 }

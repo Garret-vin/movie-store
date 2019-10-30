@@ -3,12 +3,16 @@ package com.garret.movies.service.impl;
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
-import com.garret.movies.service.dto.MovieDto;
+import com.garret.movies.service.dto.SimpleMovieDto;
+import com.garret.movies.service.dto.response.MovieDto;
+import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,9 +60,17 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MovieDto> getAll() {
-        List<Movie> result = movieRepository.findAll();
-        return modelMapper.map(result, MOVIE_DTO_LIST_TYPE);
+    public SimpleMoviesResponse getAll(Pageable pageable) {
+        Page<Movie> fullPage = movieRepository.findAll(pageable);
+        Type simpleMovieListType = new TypeToken<List<SimpleMovieDto>>() {
+        }.getType();
+        List<SimpleMovieDto> simpleMovieList = modelMapper.map(fullPage.getContent(), simpleMovieListType);
+
+        SimpleMoviesResponse response = new SimpleMoviesResponse();
+        response.setSearchContent(simpleMovieList);
+        response.setPageSize(fullPage.getSize());
+        response.setTotalElements(fullPage.getTotalElements());
+        return response;
     }
 
     @Override

@@ -1,6 +1,5 @@
-package com.garret.movies.config;
+package com.garret.movies.config.mapper;
 
-import com.garret.movies.config.mapper.ModelMapperConfigurer;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;

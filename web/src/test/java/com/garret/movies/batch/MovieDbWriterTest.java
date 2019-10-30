@@ -2,7 +2,7 @@ package com.garret.movies.batch;
 
 import com.garret.movies.omdb.entity.OmdbMovie;
 import com.garret.movies.service.api.MovieService;
-import com.garret.movies.service.dto.MovieDto;
+import com.garret.movies.service.dto.response.MovieDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
