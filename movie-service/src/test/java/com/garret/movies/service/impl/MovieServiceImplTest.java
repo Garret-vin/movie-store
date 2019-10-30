@@ -57,16 +57,16 @@ public class MovieServiceImplTest {
         movieDto = new MovieDto();
         movieDto.setImdbId("tt223344");
         CountryDto countryDto = new CountryDto();
-        country.setName("USA");
+        countryDto.setValue("USA");
         movieDto.setCountries(Collections.singletonList(countryDto));
         GenreDto genreDto = new GenreDto();
-        genre.setValue("Action");
+        genreDto.setValue("Action");
         movieDto.setGenres(Collections.singletonList(genreDto));
         ActorDto actorDto = new ActorDto();
-        actor.setFullName("Nikole Kidman");
+        actorDto.setValue("Nikole Kidman");
         movieDto.setActors(Collections.singletonList(actorDto));
         LanguageDto languageDto = new LanguageDto();
-        language.setValue("English");
+        languageDto.setValue("English");
         movieDto.setLanguages(Collections.singletonList(languageDto));
     }
 
