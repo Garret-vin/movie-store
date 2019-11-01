@@ -5,14 +5,12 @@ import com.garret.movies.omdb.entity.ShortMovie;
 import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @StepScope
@@ -22,10 +20,12 @@ public class ShortMovieReader implements ItemReader<ShortMovie> {
     private String title;
     private List<ShortMovie> movieData;
     private OmdbClient omdbClient;
+    private AtomicInteger index;
 
     public ShortMovieReader(OmdbClient omdbClient) {
         this.omdbClient = omdbClient;
         this.movieData = new ArrayList<>();
+        this.index = new AtomicInteger(0);
     }
 
     @BeforeStep
@@ -34,13 +34,7 @@ public class ShortMovieReader implements ItemReader<ShortMovie> {
     }
 
     @Override
-    public ShortMovie read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        ShortMovie shortMovie = null;
-
-        if (!movieData.isEmpty()) {
-            shortMovie = movieData.remove(0);
-        }
-
-        return shortMovie;
+    public ShortMovie read() {
+        return index.get() < movieData.size() ? movieData.get(index.getAndIncrement()) : null;
     }
 }
