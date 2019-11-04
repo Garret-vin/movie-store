@@ -1,6 +1,10 @@
 package com.garret.movies.util;
 
 import com.garret.movies.exception.IncorrectDateException;
+import com.garret.movies.service.dto.ActorDto;
+import com.garret.movies.service.dto.CountryDto;
+import com.garret.movies.service.dto.GenreDto;
+import com.garret.movies.service.dto.LanguageDto;
 import com.garret.movies.service.dto.marker.Valuable;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +24,7 @@ public class MovieUtil {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
     private static final String NOT_ASSIGNED = "N/A";
 
+    @SuppressWarnings("unchecked")
     public static <T extends Valuable> List<T> stringToValuableList(@NonNull String input, @NonNull Class<T> clazz) {
         if (isInvalidString(input)) {
             return Collections.emptyList();
@@ -28,11 +33,25 @@ public class MovieUtil {
                 .map(String::trim)
                 .map(value -> {
                     T valuable = null;
-                    try {
-                        valuable = clazz.newInstance();
+                    String className = clazz.getSimpleName();
+                    switch (className) {
+                        case "ActorDto":
+                            valuable = (T) new ActorDto();
+                            break;
+                        case "CountryDto":
+                            valuable = (T) new CountryDto();
+                            break;
+                        case "GenreDto":
+                            valuable = (T) new GenreDto();
+                            break;
+                        case "LanguageDto":
+                            valuable = (T) new LanguageDto();
+                            break;
+                    }
+                    if (valuable != null) {
                         valuable.setValue(value);
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        log.error("Can't create new instance of " + clazz.getSimpleName(), e);
+                    } else {
+                        log.error("Can't create new instance of " + clazz.getSimpleName());
                     }
                     return valuable;
                 }).collect(Collectors.toList());

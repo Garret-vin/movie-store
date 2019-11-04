@@ -29,6 +29,8 @@ public class MovieServiceImpl implements MovieService {
     }.getType();
     private static final Type MOVIE_DTO_LIST_TYPE = new TypeToken<List<MovieDto>>() {
     }.getType();
+    private static final Type SIMPLE_MOVIE_DTO_LIST_TYPE = new TypeToken<List<SimpleMovieDto>>() {
+    }.getType();
     private MovieRepository movieRepository;
     private ModelMapper modelMapper;
 
@@ -62,9 +64,7 @@ public class MovieServiceImpl implements MovieService {
     @Transactional(readOnly = true)
     public SimpleMoviesResponse getAll(Pageable pageable) {
         Page<Movie> fullPage = movieRepository.findAll(pageable);
-        Type simpleMovieListType = new TypeToken<List<SimpleMovieDto>>() {
-        }.getType();
-        List<SimpleMovieDto> simpleMovieList = modelMapper.map(fullPage.getContent(), simpleMovieListType);
+        List<SimpleMovieDto> simpleMovieList = modelMapper.map(fullPage.getContent(), SIMPLE_MOVIE_DTO_LIST_TYPE);
 
         SimpleMoviesResponse response = new SimpleMoviesResponse();
         response.setSearchContent(simpleMovieList);
