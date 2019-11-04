@@ -2,10 +2,12 @@ package com.garret.movies.config.mapper.impl;
 
 import com.garret.movies.config.mapper.ModelMapperConfigurer;
 import com.garret.movies.omdb.entity.OmdbMovie;
-import com.garret.movies.service.dto.*;
+import com.garret.movies.service.dto.ActorDto;
+import com.garret.movies.service.dto.CountryDto;
+import com.garret.movies.service.dto.GenreDto;
+import com.garret.movies.service.dto.LanguageDto;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.util.MovieUtil;
-import lombok.AllArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -15,21 +17,18 @@ import java.sql.Date;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
 public class OmdbMovieToMovieDtoConfigurer implements ModelMapperConfigurer {
 
-    private final ModelMapper modelMapper;
-
     @Override
-    public void configure() {
+    public void configure(ModelMapper modelMapper) {
         Converter<String, List<ActorDto>> toActorDtoConverter = context ->
-                MovieUtil.stringToValuableList(context.getSource(), ActorDto.class);
+                MovieUtil.stringToValuableList(context.getSource(), ActorDto::new);
         Converter<String, List<GenreDto>> toGenresDtoConverter = context ->
-                MovieUtil.stringToValuableList(context.getSource(), GenreDto.class);
+                MovieUtil.stringToValuableList(context.getSource(), GenreDto::new);
         Converter<String, List<LanguageDto>> toLanguageDtoConverter = context ->
-                MovieUtil.stringToValuableList(context.getSource(), LanguageDto.class);
+                MovieUtil.stringToValuableList(context.getSource(), LanguageDto::new);
         Converter<String, List<CountryDto>> toCountriesDtoConverter = context ->
-                MovieUtil.stringToValuableList(context.getSource(), CountryDto.class);
+                MovieUtil.stringToValuableList(context.getSource(), CountryDto::new);
         Converter<String, Integer> toImdbVotesConverter = context ->
                 MovieUtil.convertStringToInteger(context.getSource());
         Converter<String, Double> toImdbRatingDtoConverter = context ->

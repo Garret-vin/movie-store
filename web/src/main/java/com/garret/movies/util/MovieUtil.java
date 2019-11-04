@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,34 +25,18 @@ public class MovieUtil {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
     private static final String NOT_ASSIGNED = "N/A";
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Valuable> List<T> stringToValuableList(@NonNull String input, @NonNull Class<T> clazz) {
+    public static <T extends Valuable> List<T> stringToValuableList(@NonNull String input, Supplier<T> supplier) {
         if (isInvalidString(input)) {
             return Collections.emptyList();
         }
         return Arrays.stream(input.split(","))
                 .map(String::trim)
                 .map(value -> {
-                    T valuable = null;
-                    String className = clazz.getSimpleName();
-                    switch (className) {
-                        case "ActorDto":
-                            valuable = (T) new ActorDto();
-                            break;
-                        case "CountryDto":
-                            valuable = (T) new CountryDto();
-                            break;
-                        case "GenreDto":
-                            valuable = (T) new GenreDto();
-                            break;
-                        case "LanguageDto":
-                            valuable = (T) new LanguageDto();
-                            break;
-                    }
+                    T valuable = supplier.get();
                     if (valuable != null) {
                         valuable.setValue(value);
                     } else {
-                        log.error("Can't create new instance of " + className);
+                        log.error("Can't create new instance from string " + value);
                     }
                     return valuable;
                 }).collect(Collectors.toList());

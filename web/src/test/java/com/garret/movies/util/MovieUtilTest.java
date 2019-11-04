@@ -79,7 +79,7 @@ public class MovieUtilTest {
         String input = "Arnold";
         ActorDto actorDto = new ActorDto();
         actorDto.setValue(input);
-        List<ActorDto> resultList = MovieUtil.stringToValuableList(input, ActorDto.class);
+        List<ActorDto> resultList = MovieUtil.stringToValuableList(input, ActorDto::new);
         assertThat(resultList)
                 .isNotNull()
                 .isNotEmpty()
@@ -92,7 +92,7 @@ public class MovieUtilTest {
         String input = "USA";
         CountryDto countryDto = new CountryDto();
         countryDto.setValue(input);
-        List<CountryDto> resultList = MovieUtil.stringToValuableList(input, CountryDto.class);
+        List<CountryDto> resultList = MovieUtil.stringToValuableList(input, CountryDto::new);
         assertThat(resultList)
                 .isNotNull()
                 .isNotEmpty()
@@ -105,7 +105,7 @@ public class MovieUtilTest {
         String input = "Drama";
         GenreDto genreDto = new GenreDto();
         genreDto.setValue(input);
-        List<GenreDto> resultList = MovieUtil.stringToValuableList(input, GenreDto.class);
+        List<GenreDto> resultList = MovieUtil.stringToValuableList(input, GenreDto::new);
         assertThat(resultList)
                 .isNotNull()
                 .isNotEmpty()
@@ -118,7 +118,7 @@ public class MovieUtilTest {
         String input = "English";
         LanguageDto languageDto = new LanguageDto();
         languageDto.setValue(input);
-        List<LanguageDto> resultList = MovieUtil.stringToValuableList(input, LanguageDto.class);
+        List<LanguageDto> resultList = MovieUtil.stringToValuableList(input, LanguageDto::new);
         assertThat(resultList)
                 .isNotNull()
                 .isNotEmpty()
@@ -128,7 +128,7 @@ public class MovieUtilTest {
 
     @Test
     public void stringToValuableListWhenInvalidStringInput() {
-        List<ActorDto> result = MovieUtil.stringToValuableList("", ActorDto.class);
+        List<ActorDto> result = MovieUtil.stringToValuableList("", ActorDto::new);
         assertThat(result)
                 .isNotNull()
                 .isEmpty();
