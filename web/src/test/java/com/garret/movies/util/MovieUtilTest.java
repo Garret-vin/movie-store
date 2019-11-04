@@ -2,6 +2,9 @@ package com.garret.movies.util;
 
 import com.garret.movies.exception.IncorrectDateException;
 import com.garret.movies.service.dto.ActorDto;
+import com.garret.movies.service.dto.CountryDto;
+import com.garret.movies.service.dto.GenreDto;
+import com.garret.movies.service.dto.LanguageDto;
 import com.garret.movies.service.dto.marker.Valuable;
 import org.junit.Test;
 
@@ -72,7 +75,7 @@ public class MovieUtilTest {
     }
 
     @Test
-    public void stringToValuableList() {
+    public void stringToActorList() {
         String input = "Arnold";
         ActorDto actorDto = new ActorDto();
         actorDto.setValue(input);
@@ -81,6 +84,45 @@ public class MovieUtilTest {
                 .isNotNull()
                 .isNotEmpty()
                 .contains(actorDto);
+        assertThat(resultList.get(0)).isInstanceOf(Valuable.class);
+    }
+
+    @Test
+    public void stringToCountryList() {
+        String input = "USA";
+        CountryDto countryDto = new CountryDto();
+        countryDto.setValue(input);
+        List<CountryDto> resultList = MovieUtil.stringToValuableList(input, CountryDto.class);
+        assertThat(resultList)
+                .isNotNull()
+                .isNotEmpty()
+                .contains(countryDto);
+        assertThat(resultList.get(0)).isInstanceOf(Valuable.class);
+    }
+
+    @Test
+    public void stringToGenreList() {
+        String input = "Drama";
+        GenreDto genreDto = new GenreDto();
+        genreDto.setValue(input);
+        List<GenreDto> resultList = MovieUtil.stringToValuableList(input, GenreDto.class);
+        assertThat(resultList)
+                .isNotNull()
+                .isNotEmpty()
+                .contains(genreDto);
+        assertThat(resultList.get(0)).isInstanceOf(Valuable.class);
+    }
+
+    @Test
+    public void stringToLanguageList() {
+        String input = "English";
+        LanguageDto languageDto = new LanguageDto();
+        languageDto.setValue(input);
+        List<LanguageDto> resultList = MovieUtil.stringToValuableList(input, LanguageDto.class);
+        assertThat(resultList)
+                .isNotNull()
+                .isNotEmpty()
+                .contains(languageDto);
         assertThat(resultList.get(0)).isInstanceOf(Valuable.class);
     }
 
