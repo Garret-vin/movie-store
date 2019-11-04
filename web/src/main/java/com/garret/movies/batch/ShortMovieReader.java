@@ -35,6 +35,7 @@ public class ShortMovieReader implements ItemReader<ShortMovie> {
 
     @Override
     public ShortMovie read() {
-        return index.get() < movieData.size() ? movieData.get(index.getAndIncrement()) : null;
+        int currentIndex = index.getAndIncrement();
+        return currentIndex < movieData.size() ? movieData.get(currentIndex) : null;
     }
 }
