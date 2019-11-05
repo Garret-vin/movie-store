@@ -1,6 +1,6 @@
-package com.garret.movies.config.mapper.impl;
+package com.garret.movies.service.config.mappings.impl;
 
-import com.garret.movies.config.mapper.ModelMapperConfigurer;
+import com.garret.movies.service.config.mappings.ModelMapperConfigurer;
 import com.garret.movies.dao.entity.Country;
 import com.garret.movies.service.dto.CountryDto;
 import org.modelmapper.ModelMapper;

@@ -1,13 +1,13 @@
-package com.garret.movies.config.mapper.impl;
+package com.garret.movies.service.config.mappings.impl;
 
-import com.garret.movies.config.mapper.ModelMapperConfigurer;
 import com.garret.movies.omdb.entity.OmdbMovie;
+import com.garret.movies.service.config.mappings.ModelMapperConfigurer;
 import com.garret.movies.service.dto.ActorDto;
 import com.garret.movies.service.dto.CountryDto;
 import com.garret.movies.service.dto.GenreDto;
 import com.garret.movies.service.dto.LanguageDto;
 import com.garret.movies.service.dto.response.MovieDto;
-import com.garret.movies.util.MovieUtil;
+import com.garret.movies.service.util.MovieUtil;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;

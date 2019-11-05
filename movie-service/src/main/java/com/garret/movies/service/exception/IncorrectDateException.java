@@ -1,4 +1,4 @@
-package com.garret.movies.exception;
+package com.garret.movies.service.exception;
 
 public class IncorrectDateException extends RuntimeException {
     public IncorrectDateException(String message) {

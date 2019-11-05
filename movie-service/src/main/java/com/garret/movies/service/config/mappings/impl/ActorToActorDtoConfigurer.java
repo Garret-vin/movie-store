@@ -1,6 +1,6 @@
-package com.garret.movies.config.mapper.impl;
+package com.garret.movies.service.config.mappings.impl;
 
-import com.garret.movies.config.mapper.ModelMapperConfigurer;
+import com.garret.movies.service.config.mappings.ModelMapperConfigurer;
 import com.garret.movies.dao.entity.Actor;
 import com.garret.movies.service.dto.ActorDto;
 import org.modelmapper.ModelMapper;
@@ -8,14 +8,14 @@ import org.modelmapper.PropertyMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ActorDtoToActorConfigurer implements ModelMapperConfigurer {
+public class ActorToActorDtoConfigurer implements ModelMapperConfigurer {
 
     @Override
     public void configure(ModelMapper modelMapper) {
-        PropertyMap<ActorDto, Actor> dtoToEntityMapping = new PropertyMap<ActorDto, Actor>() {
+        PropertyMap<Actor, ActorDto> dtoToEntityMapping = new PropertyMap<Actor, ActorDto>() {
             @Override
             protected void configure() {
-                map().setFullName(source.getValue());
+                map().setValue(source.getFullName());
             }
         };
         modelMapper.addMappings(dtoToEntityMapping);

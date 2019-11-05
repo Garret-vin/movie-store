@@ -1,11 +1,7 @@
-package com.garret.movies.util;
+package com.garret.movies.service.util;
 
-import com.garret.movies.exception.IncorrectDateException;
-import com.garret.movies.service.dto.ActorDto;
-import com.garret.movies.service.dto.CountryDto;
-import com.garret.movies.service.dto.GenreDto;
-import com.garret.movies.service.dto.LanguageDto;
 import com.garret.movies.service.dto.marker.Valuable;
+import com.garret.movies.service.exception.IncorrectDateException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
