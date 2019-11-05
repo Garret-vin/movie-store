@@ -1,7 +1,7 @@
 package com.garret.movies.omdb.api;
 
-import com.garret.movies.omdb.entity.OmdbMovie;
-import com.garret.movies.omdb.entity.ShortMovie;
+import com.garret.movies.omdb.dto.OmdbMovie;
+import com.garret.movies.omdb.dto.ShortMovie;
 
 import java.util.List;
 

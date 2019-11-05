@@ -2,8 +2,8 @@ package com.garret.movies.batch;
 
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.omdb.api.OmdbClient;
-import com.garret.movies.omdb.entity.OmdbMovie;
-import com.garret.movies.omdb.entity.ShortMovie;
+import com.garret.movies.omdb.dto.OmdbMovie;
+import com.garret.movies.omdb.dto.ShortMovie;
 import com.garret.movies.service.api.MovieService;
 import org.junit.Before;
 import org.junit.Test;

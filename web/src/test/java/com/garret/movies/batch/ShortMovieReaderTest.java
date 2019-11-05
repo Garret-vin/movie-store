@@ -1,13 +1,12 @@
 package com.garret.movies.batch;
 
-import com.garret.movies.omdb.entity.ShortMovie;
+import com.garret.movies.omdb.dto.ShortMovie;
 import com.garret.movies.omdb.api.OmdbClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

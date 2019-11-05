@@ -1,6 +1,6 @@
 package com.garret.movies.batch;
 
-import com.garret.movies.omdb.entity.OmdbMovie;
+import com.garret.movies.omdb.dto.OmdbMovie;
 import com.garret.movies.service.api.MovieService;
 import com.garret.movies.service.dto.response.MovieDto;
 import lombok.RequiredArgsConstructor;

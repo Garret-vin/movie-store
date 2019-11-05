@@ -1,7 +1,7 @@
 package com.garret.movies.config;
 
-import com.garret.movies.omdb.entity.OmdbMovie;
-import com.garret.movies.omdb.entity.ShortMovie;
+import com.garret.movies.omdb.dto.OmdbMovie;
+import com.garret.movies.omdb.dto.ShortMovie;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
