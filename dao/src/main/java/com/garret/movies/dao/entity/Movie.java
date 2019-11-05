@@ -21,9 +21,9 @@ public class Movie {
     private String title;
     private String runtime;
     private String director;
-    @Column(length = 1024)
     private String plot;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private MovieType type;
     @Column(nullable = false)
     private String imdbId;
     @OneToMany(cascade = CascadeType.ALL)
