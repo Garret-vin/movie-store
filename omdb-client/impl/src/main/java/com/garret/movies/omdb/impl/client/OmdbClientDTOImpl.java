@@ -3,25 +3,18 @@ package com.garret.movies.omdb.impl.client;
 import com.garret.movies.omdb.api.OmdbClient;
 import com.garret.movies.omdb.dto.MoviesResponse;
 import com.garret.movies.omdb.dto.OmdbMovie;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
+@RequiredArgsConstructor
 public class OmdbClientDTOImpl implements OmdbClient {
 
     private final String url;
     private final String apiKey;
     private final RestTemplate restTemplate;
-
-    public OmdbClientDTOImpl(@Value("${api_url}") String url,
-                             @Value("${api_key}") String apiKey,
-                             RestTemplate restTemplate) {
-        this.url = url;
-        this.apiKey = apiKey;
-        this.restTemplate = restTemplate;
-    }
 
     @Override
     public MoviesResponse searchMovies(String title, int page) {
