@@ -1,5 +1,6 @@
 package com.garret.movies.dao.entity;
 
+import com.garret.movies.dao.entity.enums.MovieType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class Movie {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private Date released;
     private Double imdbRating;
     private Integer imdbVotes;

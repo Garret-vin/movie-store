@@ -1,6 +1,6 @@
-package com.garret.movies.dao.entity;
+package com.garret.movies.dao.entity.enums;
 
-public enum GenresName {
+public enum GenreType {
     ACTION,
     ADVENTURE,
     ANIMATION,

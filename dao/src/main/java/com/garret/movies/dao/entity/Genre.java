@@ -1,5 +1,6 @@
 package com.garret.movies.dao.entity;
 
+import com.garret.movies.dao.entity.enums.GenreType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,6 +12,6 @@ public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private GenresName name;
+    private long id;
+    private GenreType name;
 }
