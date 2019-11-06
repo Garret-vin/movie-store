@@ -1,9 +1,7 @@
 package com.garret.movies.omdb.impl.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,18 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-@PropertySource("classpath:/omdb.properties")
-public class OmdbConfig {
-
-    @Bean(name = "url")
-    public String omdbUrl(@Value("${api_url}") String url) {
-        return url;
-    }
-
-    @Bean(name = "apiKey")
-    public String apikey(@Value("${api_key}") String apiKey) {
-        return apiKey;
-    }
+public class TemplateConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
