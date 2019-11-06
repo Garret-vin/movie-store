@@ -5,25 +5,32 @@ import com.garret.movies.omdb.dto.MoviesResponse;
 import com.garret.movies.omdb.dto.OmdbMovie;
 import com.garret.movies.omdb.impl.config.api.ApiClientConfig;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 @RequiredArgsConstructor
-public class OmdbClientDTOImpl implements OmdbClient {
+public class OmdbClientDTOImpl<T> implements OmdbClient<T> {
 
     private final ApiClientConfig clientConfig;
     private final RestTemplate restTemplate;
 
     @Override
-    public MoviesResponse searchMovies(String title, int page) {
+    public MoviesResponse<T> searchMovies(String title, int page) {
         UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(clientConfig.getUrl())
                 .queryParam("apikey", clientConfig.getApiKey())
                 .queryParam("r", "json")
                 .queryParam("s", title)
                 .queryParam("page", page);
-        return restTemplate.getForObject(urlBuilder.toUriString(), MoviesResponse.class);
+        return restTemplate.exchange(
+                urlBuilder.toUriString(),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<MoviesResponse<T>>() {})
+                .getBody();
     }
 
     @Override

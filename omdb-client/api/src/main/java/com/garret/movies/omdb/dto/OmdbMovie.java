@@ -32,4 +32,6 @@ public class OmdbMovie {
     private String languages;
     @JsonProperty("Country")
     private String countries;
+    @JsonProperty("Response")
+    private boolean response;
 }

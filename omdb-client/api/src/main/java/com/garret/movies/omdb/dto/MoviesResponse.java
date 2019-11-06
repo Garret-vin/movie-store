@@ -6,11 +6,11 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MoviesResponse {
+public class MoviesResponse<T> {
     @JsonProperty("Search")
-    private List<ShortMovie> shortMovieList;
+    private List<T> contentList;
     @JsonProperty("totalResults")
-    private String totalResults;
+    private int totalResults;
     @JsonProperty("Response")
-    private String response;
+    private boolean response;
 }
