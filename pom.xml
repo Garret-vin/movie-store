@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>dao</module>
+        <module>movie-service</module>
     </modules>
 
     <parent>
