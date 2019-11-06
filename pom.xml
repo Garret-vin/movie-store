@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>omdb-client</module>
+        <module>dao</module>
     </modules>
 
     <parent>
