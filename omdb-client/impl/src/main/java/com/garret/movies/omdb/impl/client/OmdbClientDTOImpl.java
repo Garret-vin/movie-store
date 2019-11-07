@@ -29,13 +29,9 @@ public class OmdbClientDTOImpl implements OmdbClient {
                 .queryParam("r", "json")
                 .queryParam("s", title)
                 .queryParam("page", page);
-        return restTemplate.exchange(
-                urlBuilder.toUriString(),
-                HttpMethod.GET,
-                null,
+        return sendGetRequestToApi(urlBuilder,
                 new ParameterizedTypeReference<OmdbApiSearchResponse<List<SimpleMovie>>>() {
-                })
-                .getBody();
+                });
     }
 
     @Override
@@ -43,12 +39,16 @@ public class OmdbClientDTOImpl implements OmdbClient {
         UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(clientConfig.getUrl())
                 .queryParam("apikey", clientConfig.getApiKey())
                 .queryParam("i", imdbId);
+        return sendGetRequestToApi(urlBuilder, new ParameterizedTypeReference<OmdbApiResponse<OmdbMovie>>() {
+        });
+    }
+
+    private <T> T sendGetRequestToApi(UriComponentsBuilder urlBuilder, ParameterizedTypeReference<T> typeReference) {
         return restTemplate.exchange(
                 urlBuilder.toUriString(),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<OmdbApiResponse<OmdbMovie>>() {
-                })
+                typeReference)
                 .getBody();
     }
 }
