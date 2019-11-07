@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class ShortMovie {
+public class SimpleMovie {
     @JsonProperty("Title")
     private String title;
     @JsonProperty("Year")
