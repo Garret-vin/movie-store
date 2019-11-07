@@ -24,28 +24,29 @@ public class OmdbClientDTOImpl implements OmdbClient {
 
     @Override
     public OmdbApiSearchResponse<List<SimpleMovie>> searchMovies(String title, int page) {
-        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(clientConfig.getUrl())
+        String url = UriComponentsBuilder.fromHttpUrl(clientConfig.getUrl())
                 .queryParam("apikey", clientConfig.getApiKey())
                 .queryParam("r", "json")
                 .queryParam("s", title)
-                .queryParam("page", page);
-        return sendGetRequestToApi(urlBuilder,
-                new ParameterizedTypeReference<OmdbApiSearchResponse<List<SimpleMovie>>>() {
-                });
+                .queryParam("page", page)
+                .toUriString();
+        return sendGetRequestToApi(url, new ParameterizedTypeReference<OmdbApiSearchResponse<List<SimpleMovie>>>() {
+        });
     }
 
     @Override
     public OmdbApiResponse<OmdbMovie> searchByImdbId(String imdbId) {
-        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromHttpUrl(clientConfig.getUrl())
+        String url = UriComponentsBuilder.fromHttpUrl(clientConfig.getUrl())
                 .queryParam("apikey", clientConfig.getApiKey())
-                .queryParam("i", imdbId);
-        return sendGetRequestToApi(urlBuilder, new ParameterizedTypeReference<OmdbApiResponse<OmdbMovie>>() {
+                .queryParam("i", imdbId)
+                .toUriString();
+        return sendGetRequestToApi(url, new ParameterizedTypeReference<OmdbApiResponse<OmdbMovie>>() {
         });
     }
 
-    private <T> T sendGetRequestToApi(UriComponentsBuilder urlBuilder, ParameterizedTypeReference<T> typeReference) {
+    private <T> T sendGetRequestToApi(String url, ParameterizedTypeReference<T> typeReference) {
         return restTemplate.exchange(
-                urlBuilder.toUriString(),
+                url,
                 HttpMethod.GET,
                 null,
                 typeReference)
