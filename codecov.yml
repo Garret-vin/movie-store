@@ -1,6 +1,7 @@
+codecov:
+  require_ci_to_pass: true
+
 coverage:
   precision: 2
-  round: nearest
-  range: "40...70"
-  ignore:
-    - "com.garret.movies.moviestore.MovieStoreApplication.java"
+  round: down
+  range: "70...100"
