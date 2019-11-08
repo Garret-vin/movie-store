@@ -9,6 +9,9 @@ services:
   - mysql
 before_script:
   - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('rootroot') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 before_install:
   - mysql -u root -e 'CREATE DATABASE movieStore;'
@@ -21,8 +24,8 @@ cache:
 script:
   - mvn clean package
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 notifications:
   email:
@@ -33,4 +36,4 @@ notifications:
 
 env:
   global:
-    - CODECOV_TOKEN="d583518b-95d1-415e-a777-ec6a4ecab96b"
+    - CC_TEST_REPORTER_ID=c4f8dceccb951ebd666457ab7c33e05cff78995fa5557d5d4945f1c8a2cb685d
