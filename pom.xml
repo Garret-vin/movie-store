@@ -6,6 +6,7 @@
     <modules>
         <module>omdb-client</module>
         <module>dao</module>
+        <module>movie-service</module>
         <module>web</module>
     </modules>
 
