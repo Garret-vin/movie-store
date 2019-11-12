@@ -4,6 +4,7 @@ import com.garret.movies.service.dto.ActorDto;
 import com.garret.movies.service.dto.CountryDto;
 import com.garret.movies.service.dto.GenreDto;
 import com.garret.movies.service.dto.LanguageDto;
+import com.garret.movies.service.dto.enums.MovieTypeDto;
 import lombok.Data;
 
 import java.sql.Date;
@@ -19,7 +20,7 @@ public class MovieDto {
     private String runtime;
     private String director;
     private String plot;
-    private String type;
+    private MovieTypeDto type;
     private String imdbId;
     private List<GenreDto> genres;
     private List<ActorDto> actors;

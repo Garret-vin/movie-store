@@ -1,5 +1,6 @@
 package com.garret.movies.service.dto;
 
+import com.garret.movies.service.dto.enums.MovieTypeDto;
 import lombok.Data;
 
 import java.sql.Date;
@@ -10,6 +11,6 @@ public class SimpleMovieDto {
     private String title;
     private Date released;
     private Double imdbRating;
-    private String type;
+    private MovieTypeDto type;
     private Long id;
 }
