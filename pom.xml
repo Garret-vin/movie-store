@@ -45,39 +45,32 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <!--Jacoco-->
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.3</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.3</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*exception/**/*</exclude>
-                        <exclude>**/*config/**/*</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
+                        <id>report-aggregate</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>prepare-agent</goal>
+                            <goal>report-aggregate</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
+                        <configuration>
+                            <title>JaCoCo</title>
+                            <footer>Code Coverage Report for JaCoCo ${project.version}</footer>
+                            <includes>
+                                <!-- Analyze class files only to exclude shaded agent JAR from report -->
+                                <include>**/*.class</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/MovieApplication.class</exclude>
+                                <exclude>**/config/**/*</exclude>
+                                <exclude>**/exception/**/*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

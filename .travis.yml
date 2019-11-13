@@ -7,6 +7,12 @@ sudo: false
 
 services:
   - mysql
+
+addons:
+  code_climate:
+    repo_token:
+      secure: "pdpKV..."
+
 before_script:
   - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('rootroot') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - ./cc-test-reporter before-build
@@ -16,17 +22,16 @@ before_install:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
 
-
 cache:
   directories:
     - $HOME/.m2
 
 script:
-  - mvn clean package
+  - mvn clean test
 
 after_script:
-  JACOCO_SOURCE_PATH=web/src/main/java ./cc-test-reporter
-  \format-coverage web/target/site/jacoco/jacoco.xml
+  JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter
+  \format-coverage target/site/jacoco-aggregate/jacoco.xml
   \--input-type jacoco
   ./cc-test-reporter upload-coverage
 
