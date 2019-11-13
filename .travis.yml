@@ -25,6 +25,9 @@ script:
   - mvn clean package
 
 after_script:
+  cp target/site/jacoco/jacoco.xml src/main/java/jacoco.xml
+  cd src/main/java/
+  ../../../../cc-test-reporter after-build -d -t jacoco
   JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter
   \format-coverage web/target/site/jacoco/jacoco.xml
   \--input-type jacoco
