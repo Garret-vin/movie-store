@@ -8,11 +8,6 @@ sudo: false
 services:
   - mysql
 
-addons:
-  code_climate:
-    repo_token:
-      secure: "pdpKV..."
-
 before_script:
   - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('rootroot') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - ./cc-test-reporter before-build
