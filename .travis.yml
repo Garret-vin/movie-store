@@ -7,6 +7,7 @@ sudo: false
 
 services:
   - mysql
+
 before_script:
   - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('rootroot') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -22,10 +23,15 @@ cache:
     - $HOME/.m2
 
 script:
-  - mvn clean package
+  - mvn test
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+#  JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter
+#  \format-coverage target/site/jacoco-aggregate/jacoco.xml
+#  \--input-type jacoco
+#  ./cc-test-reporter upload-coverage
+  - ./cc-test-reporter format-coverage -d -t jacoco **/target/jacoco-ut/jacoco.xml
+  - ./cc-test-reporter upload-coverage -d
 
 notifications:
   email:
