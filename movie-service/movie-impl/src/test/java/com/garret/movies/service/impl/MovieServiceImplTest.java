@@ -155,20 +155,18 @@ public class MovieServiceImplTest {
     public void getAll() {
         List<Movie> movieList = Collections.singletonList(movie);
         Page<Movie> fullPage = new PageImpl<>(movieList);
-        Pageable pageable = mock(Pageable.class);
-        when(movieRepository.findAll(pageable)).thenReturn(fullPage);
-
-        Type listType = new TypeToken<List<SimpleMovieDto>>() {
-        }.getType();
         SimpleMovieDto simpleMovie = new SimpleMovieDto();
         simpleMovie.setId(movie.getId());
         List<SimpleMovieDto> simpleMovieList = Collections.singletonList(simpleMovie);
-        when(modelMapper.map(fullPage.getContent(), listType)).thenReturn(simpleMovieList);
-
         SimpleMoviesResponse expected = new SimpleMoviesResponse();
         expected.setSearchContent(simpleMovieList);
         expected.setPageSize(fullPage.getSize());
         expected.setTotalElements(fullPage.getTotalElements());
+
+        Pageable pageable = mock(Pageable.class);
+        when(movieRepository.findAll(any(Pageable.class))).thenReturn(fullPage);
+        when(modelMapper.map(fullPage, SimpleMoviesResponse.class)).thenReturn(expected);
+
         SimpleMoviesResponse result = movieService.getAll(pageable);
 
         assertThat(result)
@@ -176,7 +174,7 @@ public class MovieServiceImplTest {
                 .isEqualTo(expected);
 
         verify(movieRepository).findAll(pageable);
-        verify(modelMapper).map(movieList, listType);
+        verify(modelMapper).map(fullPage, SimpleMoviesResponse.class);
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.garret.movies.service.impl;
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
-import com.garret.movies.service.dto.SimpleMovieDto;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import lombok.AllArgsConstructor;
@@ -28,8 +27,6 @@ public class MovieServiceImpl implements MovieService {
     private static final Type MOVIE_LIST_TYPE = new TypeToken<List<Movie>>() {
     }.getType();
     private static final Type MOVIE_DTO_LIST_TYPE = new TypeToken<List<MovieDto>>() {
-    }.getType();
-    private static final Type SIMPLE_MOVIE_DTO_LIST_TYPE = new TypeToken<List<SimpleMovieDto>>() {
     }.getType();
     private MovieRepository movieRepository;
     private ModelMapper modelMapper;
@@ -64,13 +61,7 @@ public class MovieServiceImpl implements MovieService {
     @Transactional(readOnly = true)
     public SimpleMoviesResponse getAll(Pageable pageable) {
         Page<Movie> fullPage = movieRepository.findAll(pageable);
-        List<SimpleMovieDto> simpleMovieList = modelMapper.map(fullPage.getContent(), SIMPLE_MOVIE_DTO_LIST_TYPE);
-
-        SimpleMoviesResponse response = new SimpleMoviesResponse();
-        response.setSearchContent(simpleMovieList);
-        response.setPageSize(fullPage.getSize());
-        response.setTotalElements(fullPage.getTotalElements());
-        return response;
+        return modelMapper.map(fullPage, SimpleMoviesResponse.class);
     }
 
     @Override
@@ -95,6 +86,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     @Transactional
     public void deleteAll() {
+        log.info("Deleting all movies from database");
         movieRepository.deleteAll();
     }
 
