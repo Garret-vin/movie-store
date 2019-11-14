@@ -30,7 +30,7 @@ after_script:
 #  \format-coverage target/site/jacoco-aggregate/jacoco.xml
 #  \--input-type jacoco
 #  ./cc-test-reporter upload-coverage
-  - JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage -d -t jacoco target/site/jacoco-aggregate/jacoco.xml
+  - ./cc-test-reporter format-coverage -d -t jacoco ./target/jacoco-ut/jacoco.xml
   - ./cc-test-reporter upload-coverage -d
 
 notifications:

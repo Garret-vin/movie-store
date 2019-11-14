@@ -53,23 +53,29 @@
                 <version>0.8.3</version>
                 <executions>
                     <execution>
-                        <id>report-aggregate</id>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
                         <phase>prepare-package</phase>
                         <goals>
-                            <goal>report-aggregate</goal>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
                         </goals>
                         <configuration>
-                            <title>JaCoCo</title>
-                            <footer>Code Coverage Report for JaCoCo ${project.version}</footer>
-                            <includes>
-                                <!-- Analyze class files only to exclude shaded agent JAR from report -->
-                                <include>**/*.class</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/MovieApplication.class</exclude>
-                                <exclude>**/config/**/*</exclude>
-                                <exclude>**/exception/**/*</exclude>
-                            </excludes>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <dataFile>target/jacoco.exec</dataFile>
+                            <!-- Sets the output directory for the code coverage report. -->
+                            <outputDirectory>target/jacoco-ut</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
