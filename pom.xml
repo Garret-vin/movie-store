@@ -87,7 +87,17 @@
                         <phase>test</phase>
                         <configuration>
                             <tasks>
-                                <replace file="target/jacoco-ut/jacoco.xml" token="com/" value="src/main/java/com/"/>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+                                <if>
+                                    <available file="target/jacoco-ut/jacoco.xml"/>
+                                    <then>
+                                        <replace file="target/jacoco-ut/jacoco.xml" token="com/" value="src/main/java/com/"/>
+                                    </then>
+
+                                    <else>
+                                        <echo>The file does not exist</echo>
+                                    </else>
+                                </if>
                             </tasks>
                         </configuration>
                         <goals>
@@ -95,6 +105,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>20020829</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
