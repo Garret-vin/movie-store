@@ -26,8 +26,10 @@ script:
   - mvn test
 
 after_script:
-  - ./cc-test-reporter format-coverage -d -t jacoco ./target/site/jacoco-aggregate/
-  - ./cc-test-reporter upload-coverage -d
+  JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter
+  \format-coverage coverage-report/target/site/jacoco-aggregate/jacoco.xml
+  \--input-type jacoco
+  ./cc-test-reporter upload-coverage
 
 notifications:
   email:
