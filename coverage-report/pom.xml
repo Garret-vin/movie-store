@@ -8,8 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>coverage-report</artifactId>
     <packaging>jar</packaging>
-    <artifactId>coverage-reports</artifactId>
 
     <dependencies>
         <dependency>
@@ -33,31 +34,30 @@
     </dependencies>
 
     <build>
-    <plugins>
-        <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.3</version>
-            <executions>
-                <execution>
-                    <id>report-aggregate</id>
-                    <phase>verify</phase>
-                    <goals>
-                        <goal>report-aggregate</goal>
-                    </goals>
-                    <configuration>
-                        <dataFileIncludes>
-                            <include>target/coverage-reports/aggregate.exec</include>
-                        </dataFileIncludes>
-                        <excludes>
-                            <exclude>**/*_.class</exclude>
-                            <exclude>**/config/**/*</exclude>
-                            <exclude>**/exception/**/*</exclude>
-                        </excludes>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*.class</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/MovieApplication.class</exclude>
+                                <exclude>**/config/**/*</exclude>
+                                <exclude>**/exception/**/*</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
