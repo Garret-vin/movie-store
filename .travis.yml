@@ -26,12 +26,9 @@ script:
   - mvn test
 
 after_script:
-#  JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter
-#  \format-coverage target/site/jacoco-aggregate/jacoco.xml
-#  \--input-type jacoco
-#  ./cc-test-reporter upload-coverage
-  - ./cc-test-reporter format-coverage -d -t jacoco **/target/jacoco-ut/jacoco.xml
-  - ./cc-test-reporter upload-coverage -d
+  - sed -e 's/<[\/]\?group[^>]*>//g' target/site/jacoco-aggregate/jacoco.xml > target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml
+  - JACOCO_SOURCE_PATH="dao/src/main/java web/src/main/java" ./cc-test-reporter format-coverage target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml --input-type jacoco
+  - ./cc-test-reporter upload-coverage
 
 notifications:
   email:
