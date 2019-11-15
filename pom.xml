@@ -101,7 +101,7 @@
                                 <if>
                                     <available file="target/jacoco-ut/jacoco.xml"/>
                                     <then>
-                                        <replace file="target/jacoco-ut/jacoco.xml" token="com/" value="${project.basedir}/../src/main/java/com/"/>
+                                        <replace file="target/jacoco-ut/jacoco.xml" token="com/" value="${basedir}/src/main/java/com/"/>
                                     </then>
 
                                     <else>
