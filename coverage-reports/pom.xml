@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>movie-store</artifactId>
+        <groupId>com.garret.movies</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+    <artifactId>coverage-reports</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.garret.movies</groupId>
+            <artifactId>movie-impl</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.garret.movies</groupId>
+            <artifactId>omdb-impl</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.garret.movies</groupId>
+            <artifactId>web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+    <plugins>
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.3</version>
+            <executions>
+                <execution>
+                    <id>report-aggregate</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>report-aggregate</goal>
+                    </goals>
+                    <configuration>
+                        <dataFileIncludes>
+                            <include>target/coverage-reports/aggregate.exec</include>
+                        </dataFileIncludes>
+                        <excludes>
+                            <exclude>**/*_.class</exclude>
+                            <exclude>**/config/**/*</exclude>
+                            <exclude>**/exception/**/*</exclude>
+                        </excludes>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+    </build>
+</project>

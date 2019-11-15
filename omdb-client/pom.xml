@@ -12,8 +12,8 @@
     <artifactId>omdb-client</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>api</module>
-        <module>impl</module>
+        <module>omdb-api</module>
+        <module>omdb-impl</module>
     </modules>
 
     <dependencies>

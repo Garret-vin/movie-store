@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>impl</artifactId>
+    <artifactId>omdb-impl</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.garret.movies</groupId>
-            <artifactId>api</artifactId>
+            <artifactId>omdb-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

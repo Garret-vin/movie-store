@@ -8,6 +8,7 @@
         <module>dao</module>
         <module>movie-service</module>
         <module>web</module>
+        <module>coverage-reports</module>
     </modules>
 
     <parent>
@@ -45,6 +46,7 @@
         </dependencies>
     </dependencyManagement>
 
+
     <build>
         <plugins>
             <plugin>
@@ -62,6 +64,8 @@
                             <propertyName>surefireArgLine</propertyName>
                             <excludes>
                                 <exclude>**/*_</exclude>
+                                <exclude>**/config/**/*</exclude>
+                                <exclude>**/exception/**/*</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -111,21 +115,6 @@
                             </excludes>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>report-aggregate</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report-aggregate</goal>
-                        </goals>
-                        <configuration>
-                            <dataFileIncludes>
-                                <include>target/coverage-reports/aggregate.exec</include>
-                            </dataFileIncludes>
-                            <excludes>
-                                <exclude>**/*_.class</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
@@ -141,6 +130,15 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
 
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
