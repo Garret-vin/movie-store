@@ -26,8 +26,8 @@ script:
   - mvn test
 
 after_script:
-  - sed -e 's/<[\/]\?group[^>]*>//g' target/site/jacoco-aggregate/jacoco.xml > target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml
-  - JACOCO_SOURCE_PATH="dao/src/main/java movie-service/src/main/java omdb-client/src/main/java web/src/main/java" ./cc-test-reporter format-coverage target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml --input-type jacoco
+#  - sed -e 's/<[\/]\?group[^>]*>//g' target/site/jacoco-aggregate/jacoco.xml > target/site/jacoco-aggregate/jacoco-codeclimatecompat.xml
+  - JACOCO_SOURCE_PATH="movie-service/movie-impl/src/main/java omdb-client/omdb-impl/src/main/java web/src/main/java" ./cc-test-reporter format-coverage target/site/jacoco-aggregate/jacoco.xml --input-type jacoco
   - ./cc-test-reporter upload-coverage
 
 notifications:
