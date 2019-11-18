@@ -50,6 +50,7 @@ public class SpringBatchConfig {
                 .processor(itemProcessor)
                 .writer(itemWriter)
                 .taskExecutor(threadPoolTaskExecutor())
+                .throttleLimit(4)
                 .build();
     }
 }
