@@ -39,6 +39,6 @@ public class SimpleMovieReader extends AbstractPagingItemReader<SimpleMovie> {
 
     @Override
     protected void doJumpToPage(int i) {
-
+        //no operation required
     }
 }
