@@ -2,6 +2,8 @@ package com.garret.movies.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -20,19 +22,22 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.garret.movies.controller"))
+                .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "My Movie-Storage API",
-                "OMDB movie API",
-                "Garret",
-                "Terms of service",
-                new Contact("Alexander Pavlenko", "My WEB site", "pavlenko.av92@gmail.com"),
-                "Licensed", "API license URL", Collections.emptyList());
+        return new ApiInfoBuilder()
+                .title("My Movie-Storage API")
+                .description("OMDB movie API")
+                .version("Garret")
+                .termsOfServiceUrl("Terms of service")
+                .contact(new Contact("Alexander Pavlenko", "My WEB site", "pavlenko.av92@gmail.com"))
+                .license("Licensed")
+                .licenseUrl("API license URL")
+                .extensions(Collections.emptyList())
+                .build();
     }
 }

@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +22,7 @@ public class MovieDatabaseController {
 
     @GetMapping("/{id}")
     public MovieDto getById(@PathVariable("id") Long id) {
-        return movieService.getById(id).orElse(new MovieDto());
+        return movieService.getById(id).orElse(null);
     }
 
     @GetMapping
