@@ -5,8 +5,9 @@ checkstyle:
   checks:
     com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
       enabled: false
-    similar-code:
-      enabled: false
+    method-lines:
+      config:
+        threshold: 50
 
 plugins:
   sonar-java:
@@ -16,3 +17,13 @@ plugins:
     checks:
       squid:S2885:
         enabled: false
+  duplication:
+    enabled: true
+    checks:
+      Similar code:
+        enabled: false
+
+exclude_patterns:
+  - "**/test/"
+  - "**/config/"
+  - "**/exception/"
