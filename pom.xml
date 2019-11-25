@@ -8,6 +8,7 @@
         <module>dao</module>
         <module>movie-service</module>
         <module>web</module>
+        <module>common</module>
     </modules>
 
     <parent>
