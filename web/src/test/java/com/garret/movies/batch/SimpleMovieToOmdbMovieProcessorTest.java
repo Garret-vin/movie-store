@@ -33,7 +33,7 @@ public class SimpleMovieToOmdbMovieProcessorTest {
     }
 
     @Test
-    public void process() throws Exception {
+    public void processWhenResponseIsSuccess() throws Exception {
         OmdbMovie omdbMovie = new OmdbMovie();
         omdbMovie.setImdbId(testShortMovie.getImdbId());
         OmdbApiResponse<OmdbMovie> response = new OmdbApiResponse<>();
@@ -45,6 +45,20 @@ public class SimpleMovieToOmdbMovieProcessorTest {
         OmdbMovie result = processor.process(testShortMovie);
 
         assertThat(result).isNotNull().isEqualTo(omdbMovie);
+        verify(movieService).existsByImdbId(testShortMovie.getImdbId());
+        verify(omdbClient).searchByImdbId(testShortMovie.getImdbId());
+    }
+
+    @Test
+    public void processWhenResponseIsNotSuccess() throws Exception {
+        OmdbApiResponse<OmdbMovie> response = new OmdbApiResponse<>();
+        response.setSuccess(false);
+        when(movieService.existsByImdbId(anyString())).thenReturn(false);
+        when(omdbClient.searchByImdbId(testShortMovie.getImdbId())).thenReturn(response);
+
+        OmdbMovie result = processor.process(testShortMovie);
+
+        assertThat(result).isNull();
         verify(movieService).existsByImdbId(testShortMovie.getImdbId());
         verify(omdbClient).searchByImdbId(testShortMovie.getImdbId());
     }
