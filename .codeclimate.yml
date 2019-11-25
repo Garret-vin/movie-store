@@ -25,5 +25,5 @@ plugins:
 
 exclude_patterns:
   - "**/test/"
-  - "**/config/"
+  - "**/config/**/*"
   - "**/exception/"
