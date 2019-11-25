@@ -22,8 +22,3 @@ plugins:
     checks:
       Similar code:
         enabled: false
-
-exclude_patterns:
-  - "**/test/"
-  - "**/config/**/*"
-  - "**/exception/"

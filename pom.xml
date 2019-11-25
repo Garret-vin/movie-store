@@ -79,6 +79,8 @@
                             <excludes>
                                 <exclude>**/MovieApplication.class</exclude>
                                 <exclude>**/config/**/*</exclude>
+                                <exclude>**/config/mapper/**/*</exclude>
+                                <exclude>**/config/mapper/impl/**/*</exclude>
                                 <exclude>**/exception/**/*</exclude>
                             </excludes>
                         </configuration>
