@@ -23,25 +23,18 @@ public class OmdbMovieToMovieDtoConfigurer implements ModelMapperConfigurer {
     public void configure(ModelMapper modelMapper) {
         Converter<String, MovieTypeDto> movieTypeConverter = context ->
                 MovieTypeDto.valueOf(context.getSource().toUpperCase());
-
         Converter<String, List<ActorDto>> toActorDtoConverter = context ->
                 MovieUtil.stringToValuableList(context.getSource(), ActorDto::new);
-
         Converter<String, List<GenreDto>> toGenresDtoConverter = context ->
                 MovieUtil.stringToValuableList(convertToGenreString(context.getSource()), GenreDto::new);
-
         Converter<String, List<LanguageDto>> toLanguageDtoConverter = context ->
                 MovieUtil.stringToValuableList(context.getSource(), LanguageDto::new);
-
         Converter<String, List<CountryDto>> toCountriesDtoConverter = context ->
                 MovieUtil.stringToValuableList(context.getSource(), CountryDto::new);
-
         Converter<String, Integer> toImdbVotesConverter = context ->
                 MovieUtil.convertStringToInteger(context.getSource());
-
         Converter<String, Double> toImdbRatingDtoConverter = context ->
                 MovieUtil.convertStringToDouble(context.getSource());
-
         Converter<String, Date> dateConverter = context ->
                 MovieUtil.parseDate(context.getSource());
 

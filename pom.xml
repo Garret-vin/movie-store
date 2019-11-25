@@ -75,6 +75,13 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/MovieApplication.class</exclude>
+                                <exclude>**/config/**/*</exclude>
+                                <exclude>**/exception/**/*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>post-unit-test</id>

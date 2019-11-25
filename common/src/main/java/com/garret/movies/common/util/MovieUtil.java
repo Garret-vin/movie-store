@@ -21,6 +21,9 @@ public class MovieUtil {
     private static final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
     private static final String NOT_ASSIGNED = "N/A";
 
+    private MovieUtil() {
+    }
+
     public static <T extends Valuable> List<T> stringToValuableList(@NonNull String input, Supplier<T> supplier) {
         if (isInvalidString(input)) {
             return Collections.emptyList();
