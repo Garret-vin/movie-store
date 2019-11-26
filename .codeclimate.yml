@@ -11,3 +11,7 @@ plugins:
     enabled: true
     config:
       sonar.java.source: "11"
+
+exclude_patterns:
+  - "**/jooq/"
+  - "**/jooq/generated/"
