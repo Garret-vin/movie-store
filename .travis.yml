@@ -16,7 +16,8 @@ before_script:
 
 before_install:
   - mysql -u root -e 'CREATE DATABASE movieStore;'
-
+  - GRANT USAGE ON *.* TO 'root'@'localhost'
+  - GRANT ALL PRIVILEGES ON `movieStore`.* TO 'root'@'localhost'
 
 cache:
   directories:
