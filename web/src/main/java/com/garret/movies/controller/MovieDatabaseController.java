@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +33,11 @@ public class MovieDatabaseController {
     public SimpleMoviesResponse findAll(
             @PageableDefault(sort = "imdbRating", direction = Sort.Direction.DESC) Pageable pageable) {
         return movieService.getAll(pageable);
+    }
+
+    @GetMapping("/by")
+    public List<MovieDto> findByRequestParams(@RequestParam Map<String, String> params) {
+        return movieService.getByRequestParams(params);
     }
 
     @DeleteMapping
