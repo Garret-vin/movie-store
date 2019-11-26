@@ -137,7 +137,7 @@ public class MovieServiceImpl implements MovieService {
             query.addConditions(ACTOR.FULL_NAME.contains(params.get("actor")));
         }
         if (params.containsKey("year")) {
-            Map<String, Date> dates = convertYearToStartEndYearMap(Integer.parseInt(params.get("year")));
+            Map<String, Date> dates = convertYearToStartEndYearMap(params.get("year"));
             java.sql.Date start = new java.sql.Date(dates.get("start").getTime());
             java.sql.Date end = new java.sql.Date(dates.get("end").getTime());
             query.addConditions(MOVIE.RELEASED.between(start, end));
@@ -148,7 +148,7 @@ public class MovieServiceImpl implements MovieService {
         return query.fetch().intoSet(MOVIE.ID);
     }
 
-    private Map<String, Date> convertYearToStartEndYearMap(int year) {
+    private Map<String, Date> convertYearToStartEndYearMap(String year) {
         Map<String, Date> resultMap = new HashMap<>();
         String start = year + "-01-01";
         String end = year + "-12-31";
