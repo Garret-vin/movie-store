@@ -14,5 +14,4 @@ plugins:
 
 exclude_patterns:
   - "**/jooq/"
-  - "**/jooq/generated/"
   - "**/test/"
