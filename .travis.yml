@@ -9,14 +9,14 @@ services:
   - mysql
 
 before_script:
-  - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('rootroot') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+#  - echo "USE mysql;\nUPDATE user SET authentication_string=PASSWORD('rootroot') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
 before_install:
   - mysql -u root -e 'CREATE DATABASE movieStore;'
-
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON movieStore.* TO 'root'@'localhost' IDENTIFIED BY 'rootroot';\nFLUSH PRIVILEGES;";
 
 cache:
   directories:
