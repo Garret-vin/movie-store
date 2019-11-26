@@ -6,8 +6,7 @@ checkstyle:
     com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
       enabled: false
     method-lines:
-      config:
-        threshold: 50
+      enabled: false
 
 plugins:
   sonar-java:
