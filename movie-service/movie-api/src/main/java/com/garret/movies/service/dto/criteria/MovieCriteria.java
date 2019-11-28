@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class MovieCriteria {
 
-    private int year;
+    private Integer year;
     private String genre;
     private String language;
     private String actor;

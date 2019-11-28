@@ -1,5 +1,6 @@
 package com.garret.movies.service.impl;
 
+import com.garret.movies.common.exception.IncorrectDateException;
 import com.garret.movies.dao.entity.Actor;
 import com.garret.movies.dao.entity.Country;
 import com.garret.movies.dao.entity.Genre;
@@ -10,7 +11,6 @@ import com.garret.movies.service.api.MovieService;
 import com.garret.movies.service.dto.criteria.MovieCriteria;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.service.dto.response.SimpleMoviesResponse;
-import com.garret.movies.service.exception.IncorrectDateException;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -103,14 +103,14 @@ public class MovieServiceImpl implements MovieService {
                 .where();
         getMovieIdSetByParams(movieCriteria).forEach(movieId -> query.or(MOVIE.ID.eq(movieId)));
 
-        if (movieCriteria.getOrder() != null) {
-            String order = movieCriteria.getOrder();
-            if (order.equalsIgnoreCase("votes")) {
-                query.orderBy(MOVIE.IMDB_VOTES.desc());
-            } else if (order.equalsIgnoreCase("rating")) {
-                query.orderBy(MOVIE.IMDB_RATING.desc());
-            }
-        }
+        Optional.ofNullable(movieCriteria.getOrder())
+                .ifPresent(order -> {
+                    if (order.equalsIgnoreCase("votes")) {
+                        query.orderBy(MOVIE.IMDB_VOTES.desc());
+                    } else if (order.equalsIgnoreCase("rating")) {
+                        query.orderBy(MOVIE.IMDB_RATING.desc());
+                    }
+                });
         Map<Record, Result<Record>> recordResultMap = query.fetch().intoGroups(MOVIE.fields());
         List<Movie> movieList = buildRecordsMapToList(recordResultMap);
         return modelMapper.map(movieList, MOVIE_DTO_LIST_TYPE);
@@ -128,24 +128,22 @@ public class MovieServiceImpl implements MovieService {
                 .leftJoin(MOVIE_LANGUAGES).on(MOVIE.ID.eq(MOVIE_LANGUAGES.MOVIE_ID))
                 .leftJoin(LANGUAGE).on(MOVIE_LANGUAGES.LANGUAGES_ID.eq(LANGUAGE.ID));
         SelectQuery<?> query = finalStep.getQuery();
-        if (movieCriteria.getGenre() != null) {
-            query.addConditions(GENRE.NAME.contains(movieCriteria.getGenre()));
-        }
-        if (movieCriteria.getLanguage() != null) {
-            query.addConditions(LANGUAGE.NAME.contains(movieCriteria.getLanguage()));
-        }
-        if (movieCriteria.getActor() != null) {
-            query.addConditions(ACTOR.FULL_NAME.contains(movieCriteria.getActor()));
-        }
-        if (movieCriteria.getYear() != 0) {
-            Map<String, Date> dates = convertYearToStartEndYearMap(movieCriteria.getYear());
-            java.sql.Date start = new java.sql.Date(dates.get("start").getTime());
-            java.sql.Date end = new java.sql.Date(dates.get("end").getTime());
-            query.addConditions(MOVIE.RELEASED.between(start, end));
-        }
-        if (movieCriteria.getCountry() != null) {
-            query.addConditions(COUNTRY.NAME.contains(movieCriteria.getCountry()));
-        }
+        Optional.ofNullable(movieCriteria.getGenre())
+                .ifPresent(genre -> query.addConditions(GENRE.NAME.contains(genre)));
+        Optional.ofNullable(movieCriteria.getLanguage())
+                .ifPresent(lang -> query.addConditions(LANGUAGE.NAME.contains(lang)));
+        Optional.ofNullable(movieCriteria.getActor())
+                .ifPresent(actor -> query.addConditions(ACTOR.FULL_NAME.contains(actor)));
+        Optional.ofNullable(movieCriteria.getYear())
+                .ifPresent(year -> {
+                    Map<String, Date> dates = convertYearToStartEndYearMap(year);
+                    java.sql.Date start = new java.sql.Date(dates.get("start").getTime());
+                    java.sql.Date end = new java.sql.Date(dates.get("end").getTime());
+                    query.addConditions(MOVIE.RELEASED.between(start, end));
+                });
+        Optional.ofNullable(movieCriteria.getCountry())
+                .ifPresent(country -> query.addConditions(COUNTRY.NAME.contains(country)));
+
         return query.fetch().intoSet(MOVIE.ID);
     }
 
