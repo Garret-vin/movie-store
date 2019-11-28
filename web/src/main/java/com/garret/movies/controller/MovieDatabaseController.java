@@ -1,6 +1,7 @@
 package com.garret.movies.controller;
 
 import com.garret.movies.service.api.MovieService;
+import com.garret.movies.service.dto.criteria.MovieCriteria;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +32,11 @@ public class MovieDatabaseController {
     public SimpleMoviesResponse findAll(
             @PageableDefault(sort = "imdbRating", direction = Sort.Direction.DESC) Pageable pageable) {
         return movieService.getAll(pageable);
+    }
+
+    @GetMapping("/by")
+    public List<MovieDto> findByRequestParams(MovieCriteria movieCriteria) {
+        return movieService.getByRequestParams(movieCriteria);
     }
 
     @DeleteMapping

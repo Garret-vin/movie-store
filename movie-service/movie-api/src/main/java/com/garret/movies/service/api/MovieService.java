@@ -1,5 +1,6 @@
 package com.garret.movies.service.api;
 
+import com.garret.movies.service.dto.criteria.MovieCriteria;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,8 @@ public interface MovieService {
     Optional<MovieDto> getById(Long id);
 
     SimpleMoviesResponse getAll(Pageable pageable);
+
+    List<MovieDto> getByRequestParams(MovieCriteria movieCriteria);
 
     Optional<MovieDto> getByImdbId(String imdbId);
 
