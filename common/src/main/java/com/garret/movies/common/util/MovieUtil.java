@@ -32,11 +32,7 @@ public class MovieUtil {
                 .map(String::trim)
                 .map(value -> {
                     T valuable = supplier.get();
-                    if (valuable != null) {
-                        valuable.setValue(value);
-                    } else {
-                        log.error("Can't create new instance from string " + value);
-                    }
+                    valuable.setValue(value);
                     return valuable;
                 }).collect(Collectors.toList());
     }
