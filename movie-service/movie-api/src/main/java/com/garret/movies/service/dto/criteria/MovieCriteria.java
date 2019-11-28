@@ -10,5 +10,5 @@ public class MovieCriteria {
     private String language;
     private String actor;
     private String country;
-    private String order;
+    private SortOptions order;
 }

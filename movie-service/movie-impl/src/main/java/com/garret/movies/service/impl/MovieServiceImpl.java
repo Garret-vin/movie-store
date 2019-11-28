@@ -9,6 +9,7 @@ import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
 import com.garret.movies.service.dto.criteria.MovieCriteria;
+import com.garret.movies.service.dto.criteria.SortOptions;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import org.jooq.Result;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectFinalStep;
 import org.jooq.SelectQuery;
+import org.jooq.TableField;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
@@ -28,14 +30,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.garret.movies.dao.jooq.generated.Tables.*;
@@ -49,7 +51,7 @@ public class MovieServiceImpl implements MovieService {
     }.getType();
     private static final Type MOVIE_DTO_LIST_TYPE = new TypeToken<List<MovieDto>>() {
     }.getType();
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
     private MovieRepository movieRepository;
     private ModelMapper modelMapper;
     private DSLContext jooq;
@@ -102,18 +104,22 @@ public class MovieServiceImpl implements MovieService {
                 .leftJoin(LANGUAGE).on(MOVIE_LANGUAGES.LANGUAGES_ID.eq(LANGUAGE.ID))
                 .where();
         getMovieIdSetByParams(movieCriteria).forEach(movieId -> query.or(MOVIE.ID.eq(movieId)));
+        addMovieOrdering(query, movieCriteria::getOrder);
 
-        Optional.ofNullable(movieCriteria.getOrder())
-                .ifPresent(order -> {
-                    if (order.equalsIgnoreCase("votes")) {
-                        query.orderBy(MOVIE.IMDB_VOTES.desc());
-                    } else if (order.equalsIgnoreCase("rating")) {
-                        query.orderBy(MOVIE.IMDB_RATING.desc());
-                    }
-                });
         Map<Record, Result<Record>> recordResultMap = query.fetch().intoGroups(MOVIE.fields());
         List<Movie> movieList = buildRecordsMapToList(recordResultMap);
         return modelMapper.map(movieList, MOVIE_DTO_LIST_TYPE);
+    }
+
+    private void addMovieOrdering(SelectConditionStep<Record> query, Supplier<SortOptions> orderingBy) {
+        Optional.ofNullable(orderingBy.get())
+                .ifPresent(order -> {
+                    if (order.equals(SortOptions.VOTES)) {
+                        query.orderBy(MOVIE.IMDB_VOTES.desc());
+                    } else if (order.equals(SortOptions.RATING)) {
+                        query.orderBy(MOVIE.IMDB_RATING.desc());
+                    }
+                });
     }
 
     private Set<Long> getMovieIdSetByParams(MovieCriteria movieCriteria) {
@@ -128,37 +134,37 @@ public class MovieServiceImpl implements MovieService {
                 .leftJoin(MOVIE_LANGUAGES).on(MOVIE.ID.eq(MOVIE_LANGUAGES.MOVIE_ID))
                 .leftJoin(LANGUAGE).on(MOVIE_LANGUAGES.LANGUAGES_ID.eq(LANGUAGE.ID));
         SelectQuery<?> query = finalStep.getQuery();
-        Optional.ofNullable(movieCriteria.getGenre())
-                .ifPresent(genre -> query.addConditions(GENRE.NAME.contains(genre)));
-        Optional.ofNullable(movieCriteria.getLanguage())
-                .ifPresent(lang -> query.addConditions(LANGUAGE.NAME.contains(lang)));
-        Optional.ofNullable(movieCriteria.getActor())
-                .ifPresent(actor -> query.addConditions(ACTOR.FULL_NAME.contains(actor)));
-        Optional.ofNullable(movieCriteria.getYear())
-                .ifPresent(year -> {
-                    Map<String, Date> dates = convertYearToStartEndYearMap(year);
-                    java.sql.Date start = new java.sql.Date(dates.get("start").getTime());
-                    java.sql.Date end = new java.sql.Date(dates.get("end").getTime());
-                    query.addConditions(MOVIE.RELEASED.between(start, end));
-                });
-        Optional.ofNullable(movieCriteria.getCountry())
-                .ifPresent(country -> query.addConditions(COUNTRY.NAME.contains(country)));
 
+        addCondition(query, GENRE.NAME, movieCriteria::getGenre);
+        addCondition(query, LANGUAGE.NAME, movieCriteria::getLanguage);
+        addCondition(query, ACTOR.FULL_NAME, movieCriteria::getActor);
+        addCondition(query, COUNTRY.NAME, movieCriteria::getCountry);
+        Optional.ofNullable(movieCriteria.getYear())
+                .ifPresent(year ->
+                        query.addConditions(MOVIE.RELEASED.between(toDate(startOf(year)), toDate(endOf(year)))));
         return query.fetch().intoSet(MOVIE.ID);
     }
 
-    private Map<String, Date> convertYearToStartEndYearMap(int year) {
-        Map<String, Date> resultMap = new HashMap<>();
-        String start = year + "-01-01";
-        String end = year + "-12-31";
+    private String startOf(int year) {
+        return year + "-01-01";
+    }
+
+    private String endOf(int year) {
+        return year + "-12-31";
+    }
+
+    private <T> void addCondition(SelectQuery<?> query, TableField<?, T> field, Supplier<T> conditionValue) {
+        Optional.ofNullable(conditionValue.get())
+                .ifPresent(value -> query.addConditions(field.contains(value)));
+    }
+
+    private Date toDate(String date) {
         try {
-            resultMap.put("start", formatter.parse(start));
-            resultMap.put("end", formatter.parse(end));
+            return new Date(DATE_FORMATTER.parse(date).getTime());
         } catch (ParseException e) {
-            log.error("Wrong year specified: " + year, e);
+            log.error("Wrong input date format. Expected yyyy-MM-dd but received " + date, e);
             throw new IncorrectDateException("Can't parse date from DB");
         }
-        return resultMap;
     }
 
     private List<Movie> buildRecordsMapToList(@NonNull Map<Record, Result<Record>> recordResultMap) {

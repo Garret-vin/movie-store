@@ -18,9 +18,6 @@ plugins:
     config:
       sonar.java.source: "11"
       minimum_severity: critical
-    checks:
-      squid:S2885:
-        enabled: false
   duplication:
     enabled: true
     checks:
