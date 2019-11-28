@@ -7,6 +7,7 @@ import com.garret.movies.dao.entity.Language;
 import com.garret.movies.dao.entity.Movie;
 import com.garret.movies.dao.repository.MovieRepository;
 import com.garret.movies.service.api.MovieService;
+import com.garret.movies.service.dto.criteria.MovieCriteria;
 import com.garret.movies.service.dto.response.MovieDto;
 import com.garret.movies.service.dto.response.SimpleMoviesResponse;
 import com.garret.movies.service.exception.IncorrectDateException;
@@ -88,7 +89,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<MovieDto> getByRequestParams(Map<String, String> params) {
+    public List<MovieDto> getByRequestParams(MovieCriteria movieCriteria) {
         SelectConditionStep<Record> query = jooq.select()
                 .from(MOVIE)
                 .leftJoin(MOVIE_ACTORS).on(MOVIE.ID.eq(MOVIE_ACTORS.MOVIE_ID))
@@ -100,10 +101,10 @@ public class MovieServiceImpl implements MovieService {
                 .leftJoin(MOVIE_LANGUAGES).on(MOVIE.ID.eq(MOVIE_LANGUAGES.MOVIE_ID))
                 .leftJoin(LANGUAGE).on(MOVIE_LANGUAGES.LANGUAGES_ID.eq(LANGUAGE.ID))
                 .where();
-        getMovieIdSetByParams(params).forEach(movieId -> query.or(MOVIE.ID.eq(movieId)));
+        getMovieIdSetByParams(movieCriteria).forEach(movieId -> query.or(MOVIE.ID.eq(movieId)));
 
-        if (params.containsKey("top")) {
-            String order = params.get("top");
+        if (movieCriteria.getOrder() != null) {
+            String order = movieCriteria.getOrder();
             if (order.equalsIgnoreCase("votes")) {
                 query.orderBy(MOVIE.IMDB_VOTES.desc());
             } else if (order.equalsIgnoreCase("rating")) {
@@ -115,7 +116,7 @@ public class MovieServiceImpl implements MovieService {
         return modelMapper.map(movieList, MOVIE_DTO_LIST_TYPE);
     }
 
-    private Set<Long> getMovieIdSetByParams(Map<String, String> params) {
+    private Set<Long> getMovieIdSetByParams(MovieCriteria movieCriteria) {
         SelectFinalStep<?> finalStep = jooq.select(MOVIE.ID)
                 .from(MOVIE)
                 .leftJoin(MOVIE_ACTORS).on(MOVIE.ID.eq(MOVIE_ACTORS.MOVIE_ID))
@@ -127,28 +128,28 @@ public class MovieServiceImpl implements MovieService {
                 .leftJoin(MOVIE_LANGUAGES).on(MOVIE.ID.eq(MOVIE_LANGUAGES.MOVIE_ID))
                 .leftJoin(LANGUAGE).on(MOVIE_LANGUAGES.LANGUAGES_ID.eq(LANGUAGE.ID));
         SelectQuery<?> query = finalStep.getQuery();
-        if (params.containsKey("genre")) {
-            query.addConditions(GENRE.NAME.contains(params.get("genre")));
+        if (movieCriteria.getGenre() != null) {
+            query.addConditions(GENRE.NAME.contains(movieCriteria.getGenre()));
         }
-        if (params.containsKey("language")) {
-            query.addConditions(LANGUAGE.NAME.contains(params.get("language")));
+        if (movieCriteria.getLanguage() != null) {
+            query.addConditions(LANGUAGE.NAME.contains(movieCriteria.getLanguage()));
         }
-        if (params.containsKey("actor")) {
-            query.addConditions(ACTOR.FULL_NAME.contains(params.get("actor")));
+        if (movieCriteria.getActor() != null) {
+            query.addConditions(ACTOR.FULL_NAME.contains(movieCriteria.getActor()));
         }
-        if (params.containsKey("year")) {
-            Map<String, Date> dates = convertYearToStartEndYearMap(params.get("year"));
+        if (movieCriteria.getYear() != 0) {
+            Map<String, Date> dates = convertYearToStartEndYearMap(movieCriteria.getYear());
             java.sql.Date start = new java.sql.Date(dates.get("start").getTime());
             java.sql.Date end = new java.sql.Date(dates.get("end").getTime());
             query.addConditions(MOVIE.RELEASED.between(start, end));
         }
-        if (params.containsKey("country")) {
-            query.addConditions(COUNTRY.NAME.contains(params.get("country")));
+        if (movieCriteria.getCountry() != null) {
+            query.addConditions(COUNTRY.NAME.contains(movieCriteria.getCountry()));
         }
         return query.fetch().intoSet(MOVIE.ID);
     }
 
-    private Map<String, Date> convertYearToStartEndYearMap(String year) {
+    private Map<String, Date> convertYearToStartEndYearMap(int year) {
         Map<String, Date> resultMap = new HashMap<>();
         String start = year + "-01-01";
         String end = year + "-12-31";
