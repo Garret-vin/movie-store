@@ -104,15 +104,15 @@ public class MovieServiceImpl implements MovieService {
                 .leftJoin(LANGUAGE).on(MOVIE_LANGUAGES.LANGUAGES_ID.eq(LANGUAGE.ID))
                 .where();
         getMovieIdSetByParams(movieCriteria).forEach(movieId -> query.or(MOVIE.ID.eq(movieId)));
-        addMovieOrdering(query, movieCriteria::getOrder);
+        addMovieOrdering(query, movieCriteria.getOrder());
 
         Map<Record, Result<Record>> recordResultMap = query.fetch().intoGroups(MOVIE.fields());
         List<Movie> movieList = buildRecordsMapToList(recordResultMap);
         return modelMapper.map(movieList, MOVIE_DTO_LIST_TYPE);
     }
 
-    private void addMovieOrdering(SelectConditionStep<Record> query, Supplier<SortOptions> orderingBy) {
-        Optional.ofNullable(orderingBy.get())
+    private void addMovieOrdering(SelectConditionStep<Record> query, SortOptions orderingBy) {
+        Optional.ofNullable(orderingBy)
                 .ifPresent(order -> {
                     if (order.equals(SortOptions.VOTES)) {
                         query.orderBy(MOVIE.IMDB_VOTES.desc());
