@@ -31,7 +31,7 @@ public class SimpleMovieReader extends AbstractPagingItemReader<SimpleMovie> {
             results.clear();
         }
 
-        OmdbApiSearchResponse<List<SimpleMovie>> response = omdbClient.searchMovies(title, getPage());
+        OmdbApiSearchResponse<List<SimpleMovie>> response = omdbClient.searchMovies(title, getPage() + 1);
         if (response.isSuccess()) {
             results.addAll(response.getData());
         }
